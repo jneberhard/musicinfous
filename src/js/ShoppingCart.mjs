@@ -13,7 +13,7 @@ function cartItemTemplate(item) {
   </a>
   <p class="cart-card__color">
     ${item.SelectedColor?.ColorName
-      || (typeof item.SelectedColorIdx === 'number' && item.Colors?.[item.SelectedColorIdx]?.ColorName)
+      || (typeof item.SelectedColorIdx === "number" && item.Colors?.[item.SelectedColorIdx]?.ColorName)
       || item.Colors?.[0]?.ColorName
       || ""}
   </p>
@@ -77,33 +77,13 @@ export default class ShoppingCart {
     if (productListEl) {
       productListEl.innerHTML = htmlItems.join("");
 
-      // Listener to remove item
-      productListEl.querySelectorAll(".cart-card__remove").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-          const id = btn.getAttribute("data-id");
-          this.removeItem(id);
-          this.renderCartContents();
-        });
-      });
+
 
       // Listener to change quantity
-      productListEl.querySelectorAll(".cart-qty-input").forEach(input => {
-        input.addEventListener("change", (e) => {
-          const id = input.getAttribute("data-id");
-          let newQty = parseInt(input.value);
-          if (isNaN(newQty) || newQty < 1) {
-            newQty = 1;
-            input.value = 1;
-          }
+
           
           // Update quantity in the array
-          this.cartItems = this.cartItems.map(item =>
-            item.Id === id ? { ...item, Quantity: newQty } : item
-          );
-          setLocalStorage("so-cart", this.cartItems);
-          this.renderCartContents();
-        });
-      });
+
 
       // Prevent invalid input
       productListEl.querySelectorAll(".cart-qty-input").forEach(input => {

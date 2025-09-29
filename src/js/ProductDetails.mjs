@@ -49,7 +49,7 @@ function productDetailsTemplate(product, selectedColorIdx = 0, onColorSelect) {
     document.getElementById("productName").textContent = product.NameWithoutBrand;
 
     // Images carousel
-    const carouselContainer = document.getElementById('productCarousel');
+    const carouselContainer = document.getElementById("productCarousel");
     if (carouselContainer) {
         // Put together main image and extras
         const images = [product.Colors[selectedColorIdx]?.ColorPreviewImageSrc || product.Images.PrimaryLarge, 
@@ -60,20 +60,20 @@ function productDetailsTemplate(product, selectedColorIdx = 0, onColorSelect) {
             currentIdx = parseInt(carouselContainer.dataset.currentIdx) || 0;
         }
         // Clear the container
-        carouselContainer.innerHTML = '';
+        carouselContainer.innerHTML = "";
         // Main image
-        const mainImg = document.createElement('img');
-        mainImg.className = 'carousel-main-image';
+        const mainImg = document.createElement("img");
+        mainImg.className = "carousel-main-image";
         mainImg.src = images[currentIdx];
         mainImg.alt = product.NameWithoutBrand;
         carouselContainer.appendChild(mainImg);
 
         // Arrows
         if (images.length > 1) {
-            const left = document.createElement('button');
-            left.type = 'button';
-            left.className = 'carousel-arrow left';
-            left.innerHTML = '&#129152;';
+            const left = document.createElement("button");
+            left.type = "button";
+            left.className = "carousel-arrow left";
+            left.innerHTML = "&#129152;";
             left.onclick = () => {
                 let idx = currentIdx - 1;
                 if (idx < 0) idx = images.length - 1;
@@ -82,10 +82,10 @@ function productDetailsTemplate(product, selectedColorIdx = 0, onColorSelect) {
             };
             carouselContainer.appendChild(left);
 
-            const right = document.createElement('button');
-            right.type = 'button';
-            right.className = 'carousel-arrow right';
-            right.innerHTML = '&#129154;';
+            const right = document.createElement("button");
+            right.type = "button";
+            right.className = "carousel-arrow right";
+            right.innerHTML = "&#129154;";
             right.onclick = () => {
                 let idx = currentIdx + 1;
                 if (idx >= images.length) idx = 0;
@@ -97,13 +97,13 @@ function productDetailsTemplate(product, selectedColorIdx = 0, onColorSelect) {
 
         // Thumbnails
         if (images.length > 1) {
-            const thumbs = document.createElement('div');
-            thumbs.className = 'carousel-thumbs';
+            const thumbs = document.createElement("div");
+            thumbs.className = "carousel-thumbs";
             images.forEach((img, idx) => {
-                const thumb = document.createElement('img');
-                thumb.className = 'carousel-thumb' + (idx === currentIdx ? ' selected' : '');
+                const thumb = document.createElement("img");
+                thumb.className = "carousel-thumb" + (idx === currentIdx ? " selected" : "");
                 thumb.src = img;
-                thumb.alt = `thumb ${idx+1}`;
+                thumb.alt = `thumb ${idx + 1}`;
                 thumb.onclick = () => {
                     carouselContainer.dataset.currentIdx = idx;
                     productDetailsTemplate(product, selectedColorIdx, onColorSelect);
@@ -117,7 +117,7 @@ function productDetailsTemplate(product, selectedColorIdx = 0, onColorSelect) {
     }
 
     // Price
-    const price = document.getElementById('productPrice');
+    const price = document.getElementById("productPrice");
     const originalPrice = product.SuggestedRetailPrice;
     const finalPrice = product.FinalPrice;
     let priceHtml = "";
@@ -136,31 +136,31 @@ function productDetailsTemplate(product, selectedColorIdx = 0, onColorSelect) {
     price.innerHTML = priceHtml;
 
     // Render swatches
-    const swatchContainer = document.getElementById('productSwatches');
+    const swatchContainer = document.getElementById("productSwatches");
     if (swatchContainer) {
-        swatchContainer.innerHTML = '';
+        swatchContainer.innerHTML = "";
         if (product.Colors && product.Colors.length > 1) {
             product.Colors.forEach((color, idx) => {
-                const swatch = document.createElement('div');
-                swatch.className = 'swatch' + (idx === selectedColorIdx ? ' selected' : '');
+                const swatch = document.createElement("div");
+                swatch.className = "swatch" + (idx === selectedColorIdx ? " selected" : "");
                 swatch.title = color.ColorName;
                 if (color.ColorChipImageSrc) {
                     swatch.innerHTML = `<img src="${color.ColorChipImageSrc}" alt="${color.ColorName}">`;
                 } else {
-                    swatch.style.background = color.ColorHex || '#eee';
+                    swatch.style.background = color.ColorHex || "#eee";
                 }
-                swatch.addEventListener('click', () => {
+                swatch.addEventListener("click", () => {
                     if (onColorSelect) onColorSelect(idx);
                 });
                 swatchContainer.appendChild(swatch);
             });
-            swatchContainer.style.display = 'flex';
+            swatchContainer.style.display = "flex";
         } else {
-            swatchContainer.style.display = 'none';
+            swatchContainer.style.display = "none";
         }
     }
 
     // Update color name and description
-    document.getElementById('productColor').textContent = product.Colors[selectedColorIdx]?.ColorName || '';
-    document.getElementById('productDescription').innerHTML = product.DescriptionHtmlSimple;
+    document.getElementById("productColor").textContent = product.Colors[selectedColorIdx]?.ColorName || "";
+    document.getElementById("productDescription").innerHTML = product.DescriptionHtmlSimple;
 }
