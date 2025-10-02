@@ -7,7 +7,7 @@ const h2 = document.querySelector(".products h2");
 
 if (h2 && category) {
 	let categoryName = category.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase());
-	h2.textContent = `Top Products: ${categoryName}`;
+	h2.textContent = `${categoryName}`;
 }
 
 const dataSource = new ProductData();

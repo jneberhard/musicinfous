@@ -12,7 +12,7 @@ export default defineConfig({
         song: resolve(__dirname, "src/song/index.html"),
         artist: resolve(__dirname, "src/artist/index.html"),
         genre: resolve(__dirname, "src/genre/index.html"),
-        top_songs: resolve(__dirname, "src/top_songs/index.html"),
+        top: resolve(__dirname, "src/top/index.html"),
       },
     },
   },
