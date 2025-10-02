@@ -2,7 +2,7 @@ import { resolve } from "path";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  /*root: "src/",
+  root: "src/",
 
   build: {
     outDir: "../dist",
@@ -12,7 +12,7 @@ export default defineConfig({
         song: resolve(__dirname, "src/song/index.html"),
         artist: resolve(__dirname, "src/artist/index.html"),
         genre: resolve(__dirname, "src/genre/index.html"),
-        product_listing: resolve(__dirname, "src/product_listing/index.html"),
+        top_songs: resolve(__dirname, "src/top_songs/index.html"),
       },
     },
   },
