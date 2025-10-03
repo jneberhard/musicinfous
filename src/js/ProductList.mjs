@@ -53,44 +53,24 @@ export default class ProductList {
         let sorted = [...this.products]; // Create a copy of the products array
 
         switch (sortType) {
-            case "price-asc":
-                sorted.sort((a, b) => a.FinalPrice - b.FinalPrice);
-                break;
-            case "price-desc":
-                sorted.sort((a, b) => b.FinalPrice - a.FinalPrice);
-                break;
             case "name-asc":
                 sorted.sort((a, b) => a.NameWithoutBrand.localeCompare(b.NameWithoutBrand));
                 break;
             case "name-desc":
                 sorted.sort((a, b) => b.NameWithoutBrand.localeCompare(a.NameWithoutBrand));
                 break;
-            case "brand-asc":
+            case "artist-asc":
                 sorted.sort((a, b) => {
                     const brandA = a.Brand?.Name || "";
                     const brandB = b.Brand?.Name || "";
                     return brandA.localeCompare(brandB);
                 });
                 break;
-            case "brand-desc":
+            case "artist-desc":
                 sorted.sort((a, b) => {
                     const brandA = a.Brand?.Name || "";
                     const brandB = b.Brand?.Name || "";
                     return brandB.localeCompare(brandA);
-                });
-                break;
-            case "discount-desc":
-                sorted.sort((a, b) => {
-                    const discountA = a.SuggestedRetailPrice ? (a.SuggestedRetailPrice - a.FinalPrice) / a.SuggestedRetailPrice : 0;
-                    const discountB = b.SuggestedRetailPrice ? (b.SuggestedRetailPrice - b.FinalPrice) / b.SuggestedRetailPrice : 0;
-                    return discountB - discountA;
-                });
-                break;
-            case "discount-asc":
-                sorted.sort((a, b) => {
-                    const discountA = a.SuggestedRetailPrice ? (a.SuggestedRetailPrice - a.FinalPrice) / a.SuggestedRetailPrice : 0;
-                    const discountB = b.SuggestedRetailPrice ? (b.SuggestedRetailPrice - b.FinalPrice) / b.SuggestedRetailPrice : 0;
-                    return discountA - discountB;
                 });
                 break;
             default:

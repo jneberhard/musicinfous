@@ -1,4 +1,5 @@
-import { loadHeaderFooter} from "./utils.mjs";
+import { loadHeaderFooter } from "./utils.mjs";
+import { loadTopSongs, initiateSpotifyAuth } from "./top-songs.mjs";
 
 async function initMain() {
     await loadHeaderFooter();
@@ -51,20 +52,47 @@ async function initMain() {
     const closeBtn = modal?.querySelector(".close-btn");
 
     if (searchSongsBtn && searchArtistsBtn && modal && closeBtn) {
-    const openModal = (title) => {
-      modal.style.display = "flex";
-      modalTitle.textContent = title;
-    };
+        const openModal = (title) => {
+            modal.style.display = "flex";
+            modalTitle.textContent = title;
+        };
 
-    searchSongsBtn.addEventListener("click", () => openModal("Search Songs"));
-    searchArtistsBtn.addEventListener("click", () => openModal("Search Artists"));
+        searchSongsBtn.addEventListener("click", () => openModal("Search Songs"));
+        searchArtistsBtn.addEventListener("click", () => openModal("Search Artists"));
 
-    closeBtn.addEventListener("click", () => (modal.style.display = "none"));
+        closeBtn.addEventListener("click", () => (modal.style.display = "none"));
 
-    window.addEventListener("click", (event) => {
-      if (event.target === modal) modal.style.display = "none";
-    });
+        window.addEventListener("click", (event) => {
+            if (event.target === modal) modal.style.display = "none";
+        });
+    }
+
+    //Load top songs
+    const code = new URLSearchParams(window.location.search).get("code");
+  const container = document.querySelector(".top-songs ul");
+
+  if (code) {
+    try {
+      const songs = await loadTopSongs();
+      container.innerHTML = "";
+
+      songs.forEach((song) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<a href="${song.url}" target="_blank">${song.title} — ${song.artist}</a>`;
+        container.appendChild(li);
+      });
+    } catch (error) {
+    //  console.error("Error loading top songs:", error);
+      if (container) {
+        container.innerHTML = `<li class="error">⚠️ Failed to load top songs: ${error.message}</li>`;
+      }
+    }
+  } else {
+    // Not authorized yet → trigger login
+    if (container) {
+      container.innerHTML = "<li>Redirecting to Spotify login...</li>";
+    }
+    initiateSpotifyAuth();
   }
-
 }
 document.addEventListener("DOMContentLoaded", initMain);

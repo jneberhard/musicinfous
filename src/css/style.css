@@ -302,7 +302,7 @@ p {
   margin: 0 auto;
 }
 
-.top-selection .listings {
+.top-selection .top-songs, .top-selection .top-artists {
   background: #fff;
   border-radius: 8px;
   padding: 1rem;
@@ -313,28 +313,28 @@ p {
   margin: 5px 10px auto;
 }
 
-.top-selection .listings::-webkit-scrollbar {
+.top-selection .top-songs::-webkit-scrollbar,  .top-selection .top-artists::-webkit-scrollbar{
   width: 8px;
 }
-.top-selection .listings::-webkit-scrollbar-thumb {
+.top-selection .top-songs::-webkit-scrollbar-thumb, .top-selection .top-artists::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 4px;
 }
-.top-selection .listings::-webkit-scrollbar-thumb:hover {
+.top-selection .top-songs::-webkit-scrollbar-thumb:hover, .top-selection .top-artists::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
 
-.top-selection .listings h3 {
+.top-selection .top-songs h3, .top-selection .top-artists h3  {
   margin-bottom: 0.5rem;
 }
 
-.top-selection .listings ul {
+.top-selection .top-songs ul, .top-selection .top-artists ul  {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.top-selection .listings li {
+.top-selection .top-songs li, .top-selection .top-artists li {
   padding: 0.25rem 0;
   border-bottom: 1px solid #eee;
 }
@@ -344,28 +344,7 @@ p {
   text-align: center;
 }
 
-.logo--square {
-  font-size: var(--small-font);
-  width: 110px;
-  height: 80px;
 
-  flex-direction: column;
-  align-items: flex-end;
-  box-shadow: 1px 1px 4px var(--light-grey);
-  justify-content: center;
-  align-items: center;
-  line-height: 1;
-}
-
-.logo--square img {
-  width: 90px;
-  height: 90px;
-  margin-top: -1.3em;
-}
-
-.logo--square>div {
-  margin-top: -1.7em;
-}
 
 /* utility classes */
 .highlight {

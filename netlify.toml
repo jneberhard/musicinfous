@@ -1,0 +1,29 @@
+[build]
+  # Build command for Vite
+  command = "npm run build"
+  # Vite outputs to "dist" by default
+  publish = "dist"
+
+# Redirect all requests to index.html (SPA routing support)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Netlify Functions configuration
+[functions]
+  # Folder where your serverless functions live
+  directory = "netlify/functions"
+  # Optional: node_bundler = "esbuild" (faster, works well with Vite)
+  node_bundler = "esbuild"
+
+# Context-specific settings
+[context.production]
+  command = "npm run build"
+
+[context.deploy-preview]
+  command = "npm run build:staging"
+
+[context.dev]
+  # This makes `netlify dev` run Vite's dev server
+  command = "vite"
