@@ -2,3 +2,11 @@ Jim:
 1.	What external API data source(s) will you use? 
 https://musicbrainz.org/doc/MusicBrainz_API      
 https://developer.spotify.com/documentation/web-api
+
+
+
+last.fm api info:
+Application name	musicinfo
+API key	3479d48246e74981bf9426d21276ae3d
+Shared secret	7068ceb51ca1862e86d0b8e41c961253
+Registered to	jreberhard3
