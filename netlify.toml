@@ -22,7 +22,7 @@
   command = "npm run build"
 
 [context.deploy-preview]
-  command = "npm run build:staging"
+  command = "npm run build"
 
 [context.dev]
   # This makes `netlify dev` run Vite's dev server
