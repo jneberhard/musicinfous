@@ -6,16 +6,15 @@ export async function handler() {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      Authorization:
-        "Basic " + Buffer.from(`${clientId}:${clientSecret}`).toString("base64")
+      Authorization: "Basic " + Buffer.from(`${clientId}:${clientSecret}`).toString("base64"),
     },
-    body: "grant_type=client_credentials"
+    body: "grant_type=client_credentials",
   });
 
   const data = await response.json();
 
   return {
     statusCode: 200,
-    body: JSON.stringify(data) // includes { access_token, token_type, expires_in }
+    body: JSON.stringify(data), // includes { access_token, token_type, expires_in }
   };
 }

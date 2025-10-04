@@ -116,7 +116,6 @@ body {
   font-size: var(--font-base);
   color: var(--dark-grey);
   background-color: black;
-
 }
 
 .visits {
@@ -144,7 +143,7 @@ header {
   color: yellow;
 }
 
-header .left{
+header .left {
   flex: 0 1 auto;
 }
 
@@ -162,9 +161,9 @@ header .center {
 header .center h1 {
   flex: 0 1 auto;
   display: flex;
-  align-items:center;
+  align-items: center;
   justify-content: center;
-  font-family : Merriweather, serif;
+  font-family: Merriweather, serif;
 }
 
 .right {
@@ -175,17 +174,17 @@ header .center h1 {
 }
 
 .right #navMenu ul {
-    display: flex;
-    flex-direction: column;;
-    gap: 20px;                /* space between menu items */
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* space between menu items */
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .right #navMenu a {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none;
+  color: inherit;
 }
 
 p {
@@ -215,7 +214,7 @@ p {
   max-width: 400px;
   text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  position:relative;
+  position: relative;
   color: black;
 }
 .close-btn {
@@ -260,7 +259,7 @@ p {
   margin: 0 auto;
   border-radius: 12px;
   background-color: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   font-size: 1.25rem;
   line-height: 1.5;
 }
@@ -302,39 +301,46 @@ p {
   margin: 0 auto;
 }
 
-.top-selection .top-songs, .top-selection .top-artists {
+.top-selection .top-songs,
+.top-selection .top-artists {
   background: #fff;
   border-radius: 8px;
   padding: 1rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   max-height: 150px;
   overflow-y: auto;
   width: calc(100% - 10px);
   margin: 5px 10px auto;
 }
 
-.top-selection .top-songs::-webkit-scrollbar,  .top-selection .top-artists::-webkit-scrollbar{
+.top-selection .top-songs::-webkit-scrollbar,
+.top-selection .top-artists::-webkit-scrollbar {
   width: 8px;
 }
-.top-selection .top-songs::-webkit-scrollbar-thumb, .top-selection .top-artists::-webkit-scrollbar-thumb {
+.top-selection .top-songs::-webkit-scrollbar-thumb,
+.top-selection .top-artists::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 4px;
 }
-.top-selection .top-songs::-webkit-scrollbar-thumb:hover, .top-selection .top-artists::-webkit-scrollbar-thumb:hover {
+.top-selection .top-songs::-webkit-scrollbar-thumb:hover,
+.top-selection .top-artists::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
 
-.top-selection .top-songs h3, .top-selection .top-artists h3  {
+.top-selection .top-songs h3,
+.top-selection .top-artists h3 {
   margin-bottom: 0.5rem;
 }
 
-.top-selection .top-songs ul, .top-selection .top-artists ul  {
+.top-selection .top-songs ul,
+.top-selection .top-artists ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.top-selection .top-songs li, .top-selection .top-artists li {
+.top-selection .top-songs li,
+.top-selection .top-artists li {
   padding: 0.25rem 0;
   border-bottom: 1px solid #eee;
 }
@@ -343,8 +349,6 @@ p {
   flex: 1 1 45%;
   text-align: center;
 }
-
-
 
 /* utility classes */
 .highlight {
@@ -457,7 +461,6 @@ button {
 .price-block {
   text-align: center;
   margin: 1rem 0;
-
 }
 
 .final-price {
@@ -494,7 +497,7 @@ button {
 
 .focus-card img {
   width: 275px;
-  height:auto;
+  height: auto;
   object-fit: contain;
   margin-bottom: 10px;
   border-radius: 12px;
@@ -511,7 +514,6 @@ button {
   flex-wrap: wrap;
   gap: 20px;
   margin: 20px 0;
-
 }
 
 .genre-card {
@@ -520,12 +522,11 @@ button {
   align-items: center;
   width: 150px;
   text-align: center;
-
 }
 
 .genre-card img {
   width: 150px;
-  height:auto;
+  height: auto;
   object-fit: contain;
   margin-bottom: 10px;
   border-radius: 12px;
@@ -627,7 +628,7 @@ button {
     justify-content: center;
   }
 
-  .hero .top-selection a  {
+  .hero .top-selection a {
     flex: 1 1 100%; /* cards go full width on mobile */
   }
 
@@ -642,13 +643,11 @@ button {
     margin: auto;
   }
 
-
   .cart-card {
     font-size: inherit;
     grid-template-columns: 150px auto 15%;
   }
 }
-
 
 footer {
   display: flex;
@@ -668,42 +667,39 @@ footer {
   height: 120px;
   width: auto;
   margin-top: 10px;
-
 }
-
-
 
 .visits {
   font-size: 20px;
 }
 
 .info p {
-    padding-left: 15px;
-    color: white;
-    font-size: smaller;
+  padding-left: 15px;
+  color: white;
+  font-size: smaller;
 }
 
 .social {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    justify-items: center;
-    margin-top: 10px;
-    align-items: center;
-  }
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  justify-items: center;
+  margin-top: 10px;
+  align-items: center;
+}
 
 .social img {
-    height: 100px;
-    width: auto;
-    padding: 10px;
-  }
+  height: 100px;
+  width: auto;
+  padding: 10px;
+}
 .social a {
-    text-decoration: none;
-  }
+  text-decoration: none;
+}
 
 .designer p {
-    color: black;
-    line-height: 1.4;
+  color: black;
+  line-height: 1.4;
 }
 
 .cart-card__remove {
@@ -725,6 +721,48 @@ footer {
   color: #b71c1c;
 }
 
+/* ---------- Artist Page ---------- */
+#artist-info {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  margin: 2rem 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#artist-info h1 {
+  margin-bottom: 1rem;
+}
+
+#top-tracks,
+#top-albums {
+  margin: 2rem 0;
+}
+
+#top-tracks li,
+#top-albums li {
+  margin: 0.5rem 0;
+}
+
+#top-albums img {
+  max-width: 100px;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+/* song page */
+#song-info {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  margin: 2rem 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#song-info h1 {
+  margin-bottom: 1rem;
+}
+
 /* animation for equalizer */
 .equalizer {
   display: flex;
@@ -736,12 +774,13 @@ footer {
 .equalizer span {
   display: inline-block;
   width: 10px;
-  background: #ffcc00;                /* bright yellow */
+  background: #ffcc00; /* bright yellow */
   border-radius: 4px;
   animation: bounce 1s infinite ease-in-out;
-  box-shadow: 0 0 10px #ffcc00,       /* glow effect */
-              0 0 20px #ffcc00,
-              0 0 30px #ffaa00;
+  box-shadow:
+    0 0 10px #ffcc00,
+    /* glow effect */ 0 0 20px #ffcc00,
+    0 0 30px #ffaa00;
 }
 
 .equalizer span:nth-child(1) {
@@ -754,37 +793,67 @@ footer {
   animation: bounce3 0.35s infinite ease-in-out;
 }
 .equalizer span:nth-child(4) {
-  animation: bounce4 .15s infinite ease-in-out;
+  animation: bounce4 0.15s infinite ease-in-out;
 }
 .equalizer span:nth-child(5) {
-  animation: bounce5 .75s infinite ease-in-out;
-}.equalizer span:nth-child(6) {
-  animation: bounce6 .55s infinite ease-in-out;
+  animation: bounce5 0.75s infinite ease-in-out;
 }
-
+.equalizer span:nth-child(6) {
+  animation: bounce6 0.55s infinite ease-in-out;
+}
 
 /* Different bounce patterns to simulate randomness */
 @keyframes bounce1 {
-  0%, 100% { height: 20%; }
-  50% { height: 90%; }
+  0%,
+  100% {
+    height: 20%;
+  }
+  50% {
+    height: 90%;
+  }
 }
 @keyframes bounce2 {
-  0%, 100% { height: 40%; }
-  50% { height: 70%; }
+  0%,
+  100% {
+    height: 40%;
+  }
+  50% {
+    height: 70%;
+  }
 }
 @keyframes bounce3 {
-  0%, 100% { height: 10%; }
-  50% { height: 100%; }
+  0%,
+  100% {
+    height: 10%;
+  }
+  50% {
+    height: 100%;
+  }
 }
 @keyframes bounce4 {
-  0%, 100% { height: 30%; }
-  50% { height: 80%; }
+  0%,
+  100% {
+    height: 30%;
+  }
+  50% {
+    height: 80%;
+  }
 }
 @keyframes bounce5 {
-  0%, 100% { height: 15%; }
-  50% { height: 95%; }
+  0%,
+  100% {
+    height: 15%;
+  }
+  50% {
+    height: 95%;
+  }
 }
 @keyframes bounce6 {
-  0%, 100% { height: 15%; }
-  50% { height: 95%; }
+  0%,
+  100% {
+    height: 15%;
+  }
+  50% {
+    height: 95%;
+  }
 }

@@ -1,75 +1,75 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="MusicInfo - Information about music, artists, albums, and songs." />
+    <meta name="author" content="Jim Eberhard" />
+    <title>Music Info - Your source for artist and song information</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap"
+      rel="stylesheet"
+    />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="MusicInfo - Information about music, artists, albums, and songs.">
-  <meta name="author" content="Jim Eberhard">
-  <title>Music Info - Your source for artist and song information</title>
-  <link rel="stylesheet" href="/css/style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap"
-    rel="stylesheet">
+    <script type="module" src="/js/main.js" defer></script>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <meta property="og:title" content="Music Info - Your source for artist and song information" />
+    <meta property="og:description" content="Searchable database of music, artists, genres, and songs." />
+    <!--<meta property="og:image" content="https://jneberhard.github.io/wdd231/coinz/images/gold_silver.webp">-->
+    <!--<meta property="og:url" content="https://jneberhard.github.io/wdd231/coinz/">-->
+  </head>
 
-  <script type="module" src="/js/main.js" defer></script>
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <meta property="og:title" content="Music Info - Your source for artist and song information">
-  <meta property="og:description" content="Searchable database of music, artists, genres, and songs.">
-  <!--<meta property="og:image" content="https://jneberhard.github.io/wdd231/coinz/images/gold_silver.webp">-->
-  <!--<meta property="og:url" content="https://jneberhard.github.io/wdd231/coinz/">-->
-</head>
-
-<body>
-  <header class="divider" id="main-header"></header>
-  <main class="divider">
-    <div class="hero">
-      
-      <div class="mission">
-        <p>
-          Your one stop shop for music information on artists, songs, and genres. <br>
-          Explore our extensive database to discover new music and learn more about your favorite artists and songs.<br>
-          Whether you're a casual listener or a die-hard fan, Music Info has something for everyone.
+  <body>
+    <header class="divider" id="main-header"></header>
+    <main class="divider">
+      <div class="hero">
+        <div class="mission">
+          <p>
+            Your one stop shop for music information on artists, songs, and genres. <br />
+            Explore our extensive database to discover new music and learn more about your favorite artists and
+            songs.<br />
+            Whether you're a casual listener or a die-hard fan, Music Info has something for everyone.
           </p>
-      </div>    
-      <div class="top-selection">
-        <div class="focus-cards">
-          <a href="top/index.html?category=Top Songs" class="focus-card">
-            <img src="/images/songs.webp" alt="Songs" />
-            <h3>Top Songs</h3>
-          </a>
-          <a href="top/index.html?category=Top Artists" class="focus-card">
-            <img src="/images/artists.webp" alt="Artists" />
-            <h3>Top Artists</h3>
-          </a>
         </div>
-        <div class="listings-wrapper">
-          <div class="top-songs">
-            <ul>
-              <li>Loading Top songs...</li>
-            </ul>
+        <div class="top-selection">
+          <div class="focus-cards">
+            <a href="top/index.html?category=Top Songs" class="focus-card">
+              <img src="/images/songs.webp" alt="Songs" />
+              <h3>Top Songs</h3>
+            </a>
+            <a href="top/index.html?category=Top Artists" class="focus-card">
+              <img src="/images/artists.webp" alt="Artists" />
+              <h3>Top Artists</h3>
+            </a>
           </div>
-          <div class="top-artists">
-            <ul>
-              <li>Artist 1</li>
-              <li>Artist 2</li>
-              <li>Artist 3</li>
-              <li>Artist 4</li>
-              <li>Artist 5</li>
-              <li>Artist 6</li>
-              <li>Artist 7</li>
-              <li>Artist 8</li>
-              <li>Artist 9</li>
-              <li>Artist 10</li>
-            </ul>
+          <div class="listings-wrapper">
+            <div class="top-songs">
+              <ul>
+                <li>Loading Top songs...</li>
+              </ul>
+            </div>
+            <div class="top-artists">
+              <ul>
+                <li>Artist 1</li>
+                <li>Artist 2</li>
+                <li>Artist 3</li>
+                <li>Artist 4</li>
+                <li>Artist 5</li>
+                <li>Artist 6</li>
+                <li>Artist 7</li>
+                <li>Artist 8</li>
+                <li>Artist 9</li>
+                <li>Artist 10</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-<!--  Genre section-->
-    <section class="genre-selection">
+      <!--  Genre section-->
+      <section class="genre-selection">
         <a href="top/index.html?category=Country" class="genre-card">
           <img src="/images/country.webp" alt="Country" />
           <h3>Country</h3>
@@ -90,9 +90,8 @@
           <img src="/images/genres.webp" alt="More Genres" />
           <h3>More Genres</h3>
         </a>
-    </section>
-  </main>
-  <footer id="main-footer"></footer>
-</body>
-
+      </section>
+    </main>
+    <footer id="main-footer"></footer>
+  </body>
 </html>

@@ -8,11 +8,8 @@
     <script type="module" src="/js/main.js" defer></script>
   </head>
   <body>
-    <header class="divider" id="main-header">
-    </header>
+    <header class="divider" id="main-header"></header>
     <main class="divider">
-
-       
       <section class="products">
         <h2></h2>
         <label for="sort">Sort by:</label>
@@ -21,17 +18,15 @@
           <option value="price-desc">Price (High to Low)</option>
           <option value="name-asc">Name (A-Z)</option>
           <option value="name-desc">Name (Z-A)</option>
-          <option value="discount-desc">Discount (High to Low)</option> 
+          <option value="discount-desc">Discount (High to Low)</option>
           <option value="discount-asc">Discount (Low to High)</option>
           <option value="brand-asc">Brand (A-Z)</option>
-          <option value="brand-desc">Brand (Z-A)</option>    
+          <option value="brand-desc">Brand (Z-A)</option>
         </select>
       </section>
-        <ul id="product-list" class="product-list">
-          <!-- Products will show up through JS -->
-        </ul>
-      </section>
-
+      <ul id="product-list" class="product-list">
+        <!-- Products will show up through JS -->
+      </ul>
     </main>
     <footer id="main-footer"></footer>
   </body>

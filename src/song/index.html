@@ -1,36 +1,31 @@
 <!doctype html>
-
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Song details and information from Music Info" />
+    <meta name="author" content="Music Info" />
+    <title>Music Info | Song Details</title>
 
-    <title>Sleep Outside | Cart</title>
-
+    <!-- Your shared CSS -->
     <link rel="stylesheet" href="/css/style.css" />
-
-    <script src="/js/cart.js" type="module" defer></script>
+    <script type="module" src="/js/main.js" defer></script>
   </head>
+  <main class="divider">
+    <body>
+      <header id="main-header"></header>
+      <main class="song-page">
+        <section id="song-info" class="song-info">
+          <h1 id="song-title">Loading song...</h1>
+          <p id="song-artist"></p>
+          <p id="song-album"></p>
+          <p id="song-release"></p>
+          <p><a id="song-link" href="#" target="_blank">Listen on Last.fm</a></p>
+        </section>
+      </main>
 
-  <body>
-    <header class="divider" id="main-header">
-    </header>
-
-    <main class="divider">
-      <section class="products">
-        <h2>My Cart</h2>
-
-        <ul class="cart-list">
-          <!-- Cart items will be dynamically added here -->
-        </ul>
-        <div class="cart-total">
-          <button id="clear-cart" class="button button--primary">Clear Cart</button>
-          <strong>Total:</strong> $<span id="cart-total-amount"></span>
-        </div>
-      </section>
-    </main>
-
-    <footer id="main-footer"></footer>
-  </body>
+      <footer id="main-footer"></footer>
+    </body>
+  </main>
+  html>
 </html>
