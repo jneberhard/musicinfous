@@ -23,7 +23,7 @@ export async function loadTopSongs() {
     return data.tracks.track.map((track) => ({
       title: track.name,
       artist: track.artist.name,
-      url: track.url || "#", // link to track on Last.fm
+      url: track.url || "#", 
     }));
   } catch (error) {
     throw error;
