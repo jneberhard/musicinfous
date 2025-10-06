@@ -23,7 +23,7 @@ export async function loadTopArtists() {
     // Map simplified data for display
     return data.topartists.artist.map((artist) => ({
       name: artist.name,
-      url: artist.url || "#", // link to artist on Last.fm
+      url: artist.url || "#", 
     }));
   } catch (error) {
     console.error("Failed to fetch top artists:", error);
