@@ -1,81 +1,76 @@
-// artist-scripts.mjs
 const API_KEY = "3479d48246e74981bf9426d21276ae3d";
+
+import { renderArtistResults } from "../js/search.mjs";
 
 // Fetch artist info
 export async function fetchArtistInfo(artistName) {
   try {
-    const response = await fetch(
-      `https://theaudiodb.com/api/v1/json/${API_KEY}/search.php?s=${encodeURIComponent(artistName)}`
+    const mbResponse = await fetch(
+      `https://musicbrainz.org/ws/2/artist?query=${encodeURIComponent(artistName)}&fmt=json&limit=1`
     );
 
-    if (!response.ok) {
-      throw new Error(`API error! Status: ${response.status}`);
+    if (!mbResponse.ok) {
+      throw new Error(`API error! Status: ${mbResponse.status}`);
     }
 
-    const data = await response.json();
-
-    if (!data.artists || data.artists.length === 0) {
-      return { bio: "No biography available.", url: "#" };
+    const data = await mbResponse.json();
+    const artist = data.artists?.[0];
+    if (!artist) {
+      return {
+        name: artistName,
+        image: "https://via.placeholder.com/150?text=Artist",
+        bio: "No biography available.",
+      };
     }
 
-    const artist = data.artists[0];
     return {
-      bio: artist.strBiographyEN || "No biography available.",
-      url: artist.strWebsite || "#",
+      name: artist.name,
+      image: "https://via.placeholder.com/150?text=Artist",
+      bio: artist.disambiguation || "No biography available.",
     };
-  } catch (error) {
-    console.error("Failed to fetch artist info:", error);
-    return { bio: "Failed to load artist info.", url: "#" };
+
+    } catch (err) {
+    console.warn("Failed to fetch artist details:", err);
+    return {
+      name: artistName,
+      image: "https://via.placeholder.com/150?text=Artist",
+      bio: "Error fetching artist info.",
+    };
   }
 }
 
-// Fetch top tracks for artist
-export async function fetchTopTracks(artistName) {
-  try {
-    const response = await fetch(
-      `https://theaudiodb.com/api/v1/json/${API_KEY}/track-top10.php?s=${encodeURIComponent(artistName)}`
-    );
+export async function renderArtistsPage(query, container) {
+  if (!query || !container) return;
 
-    if (!response.ok) {
-      throw new Error(`API error! Status: ${response.status}`);
-    }
+  const artists = await renderArtistResults(query, container, true);
 
-    const data = await response.json();
-
-    if (!data.track) return [];
-
-    return data.track.map(track => ({
-      name: track.strTrack,
-      url: track.strMusicVid || "#",
-    }));
-  } catch (error) {
-    console.error("Failed to fetch top tracks:", error);
-    return [];
+  if (!artists || artists.length === 0) {
+    container.innerHTML = "<p>No artists found.</p>";
+    return;
   }
-}
 
-// Fetch top albums for artist
-export async function fetchTopAlbums(artistName) {
-  try {
-    const response = await fetch(
-      `https://theaudiodb.com/api/v1/json/${API_KEY}/searchalbum.php?s=${encodeURIComponent(artistName)}`
-    );
+  container.innerHTML = "";
+  const seen = new Set();
 
-    if (!response.ok) {
-      throw new Error(`API error! Status: ${response.status}`);
-    }
+  for (const artist of artists) {
+    const artistName = artist.name;
+    if (!artistName || seen.has(artistName.toLowerCase())) continue;
+    seen.add(artistName.toLowerCase());
 
-    const data = await response.json();
+    const { image, bio } = await fetchArtistInfo(artistName);
 
-    if (!data.album) return [];
+    const card = document.createElement("a");
+    card.href = `/artist/artist.html?name=${encodeURIComponent(artistName)}`;
+    card.classList.add("artist-card");
 
-    return data.album.map(album => ({
-      title: album.strAlbum,
-      year: album.intYearReleased,
-      url: album.strAlbumThumb || "#",
-    }));
-  } catch (error) {
-    console.error("Failed to fetch top albums:", error);
-    return [];
+    card.innerHTML = `
+      <img src="${image}" alt="${artistName}" />
+      <div class="artist-info">
+        <h3>${artistName}</h3>
+        <p>${bio.slice(0, 120)}...</p>
+      </div>
+    `;
+
+    container.appendChild(card);
   }
 }
