@@ -1,31 +1,69 @@
 const API_KEY = "3479d48246e74981bf9426d21276ae3d";
-const TOP_SONGS_LIMIT = 50
+const TOP_SONGS_LIMIT = 50;
 
-
+// --- Fetch data from Last.fm ---
 export async function loadTopSongs() {
-  try {
-    // Fetch the top tracks globally from Last.fm
-    const response = await fetch(
-  `https://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=United%20States&api_key=${API_KEY}&format=json&limit=${TOP_SONGS_LIMIT}`
-);
+  const url = `https://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=United%20States&api_key=${API_KEY}&format=json&limit=${TOP_SONGS_LIMIT}`;
 
+  try {
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Last.fm API error! Status: ${response.status}`);
     }
 
     const data = await response.json();
-
-    if (!data.tracks || !data.tracks.track) {
+    if (!data.tracks?.track) {
       throw new Error("No top tracks found.");
     }
 
-    // Map simplified data for display
+    // Return simplified array of songs
     return data.tracks.track.map((track) => ({
       title: track.name,
       artist: track.artist.name,
-      url: track.url || "#", // link to track on Last.fm
+      url: track.url || "#",
+      image:
+        track.image?.[2]?.["#text"] || // medium size image
+        track.image?.[1]?.["#text"] || // fallback to smaller one
+        "",
     }));
-  } catch (error) {
-    throw error;
+  } catch (err) {
+    console.error("Failed to fetch top tracks:", err);
+    throw err;
+  }
+}
+
+// --- Render data into the page ---
+export async function renderTopSongs() {
+  const topSongsContainer = document.querySelector(".top-songs ul");
+  if (!topSongsContainer) return;
+
+  const isSongsPage = window.location.pathname.includes("songs.html");
+
+  try {
+    const songs = await loadTopSongs();
+    topSongsContainer.innerHTML = songs
+      .slice(0, 50)
+      .map(
+        (s, index) => `
+          <li>
+            <span class="song-rank">${index + 1}.</span>
+            <a href="/song/song.html?title=${encodeURIComponent(s.title)}&artist=${encodeURIComponent(
+              s.artist
+            )}" class="song-link">
+              ${
+                isSongsPage && s.image
+                  ? `<img src="${s.image}" alt="${s.title} album art" class="song-thumb" />`
+                  : ""
+              }
+              <span class="song-title">${s.title}</span>
+            </a>
+            <span class="song-artist"> — ${s.artist}</span>
+          </li>
+        `
+      )
+      .join("");
+  } catch (err) {
+    console.error("Failed to render top songs:", err);
+    topSongsContainer.innerHTML = "<li>Unable to load top songs.</li>";
   }
 }

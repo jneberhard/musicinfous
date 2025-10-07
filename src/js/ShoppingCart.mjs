@@ -1,103 +1,42 @@
-import { getLocalStorage, setLocalStorage, updateCartBadge } from "./utils.mjs";
+const API_KEY = "3479d48246e74981bf9426d21276ae3d";
 
-// Template for a cart item
-function cartItemTemplate(item) {
-  return `
-<li class="cart-card divider">
-  <span class="cart-card__remove" data-id="${item.Id}" title="Remover">✖</span>
-  <a href="/product_pages/index.html?id=${item.Id}" class="cart-card__image">
-    <img src="${item.Colors?.[item.SelectedColorIdx]?.ColorPreviewImageSrc || item.Images?.PrimarySmall}" alt="${item.Name}" />
-  </a>
-  <a href="/product_pages/index.html?id=${item.Id}">
-    <h2 class="card__name">${item.Name}</h2>
-  </a>
-  <p class="cart-card__color">
-    ${item.SelectedColor?.ColorName
-      || (typeof item.SelectedColorIdx === "number" && item.Colors?.[item.SelectedColorIdx]?.ColorName)
-      || item.Colors?.[0]?.ColorName
-      || ""}
-  </p>
-  <p class="cart-card__quantity">qty: 
-    <input type="number" class="cart-qty-input" data-id="${item.Id}" min="1" value="${item.Quantity || 1}" style="width: 50px;">
-  </p>
-  <p class="cart-card__price">$${item.FinalPrice}</p>
-</li>`;
-}
+export async function renderSongDetails() {
+  const params = new URLSearchParams(window.location.search);
+  const title = params.get("title");
+  const artist = params.get("artist");
 
-export default class ShoppingCart {
-  constructor() {
-    this.cartItems = [];
+  if (!title || !artist) {
+    document.querySelector(".song-details").innerHTML = "<p>Song not found.</p>";
+    return;
   }
 
-  // Initialize cart from localStorage and render
-  async init() {
-    this.cartItems = getLocalStorage("so-cart") || [];
-    this.renderCartContents();
-  }
+  document.querySelector(".song-title").textContent = title;
+  document.querySelector(".song-artist").textContent = artist;
 
-  // Add item to cart
-  removeItem(itemId) {
-    this.cartItems = this.cartItems.filter(item => item.Id !== itemId);
-    setLocalStorage("so-cart", this.cartItems);
-  }
+  try {
+    const response = await fetch(
+      `https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=${API_KEY}&artist=${encodeURIComponent(
+        artist
+      )}&track=${encodeURIComponent(title)}&format=json`
+    );
 
-  // Get current cart items
-  getItems() {
-    return this.cartItems;
-  }
+    const data = await response.json();
 
-  // Clear all items from cart
-  clearCart() {
-    this.cartItems = [];
-    setLocalStorage("so-cart", this.cartItems);
-  }
-
-  // Render cart contents to the page
-  renderCartContents() {
-    const htmlItems = this.cartItems.map(cartItemTemplate);
-    const productListEl = document.querySelector(".cart-list");
-    const cartTotalEl = document.getElementById("cart-total-amount");
-    const cartTotal = this.cartItems.reduce((sum, item) => sum + (item.FinalPrice || 0) * (item.Quantity || 1), 0);
-    const clearCartBtn = document.getElementById("clear-cart");
-
-    // Show/hide clear cart button
-    if (clearCartBtn) {
-      clearCartBtn.style.display = this.cartItems.length > 0 ? "inline-block" : "none";
-      clearCartBtn.onclick = () => {
-        this.clearCart();
-        this.renderCartContents();
-      };
+    if (data.track) {
+      const infoDiv = document.querySelector(".song-info");
+      infoDiv.innerHTML = `
+        <p><strong>Album:</strong> ${data.track.album?.title || "Unknown"}</p>
+        <p><strong>Listeners:</strong> ${data.track.listeners}</p>
+        <p><strong>Playcount:</strong> ${data.track.playcount}</p>
+        <p><a href="${data.track.url}" target="_blank">View on Last.fm</a></p>
+      `;
+    } else {
+      document.querySelector(".song-info").innerHTML =
+        "<p>Details not available.</p>";
     }
-
-    // Update total amount
-    if (cartTotalEl)
-      cartTotalEl.textContent = this.cartItems.length === 0 ? "0.00" : cartTotal.toFixed(2);
-
-    // Verify productListEl exists before updating
-    if (productListEl) {
-      productListEl.innerHTML = htmlItems.join("");
-
-
-
-      // Listener to change quantity
-
-          
-          // Update quantity in the array
-
-
-      // Prevent invalid input
-      productListEl.querySelectorAll(".cart-qty-input").forEach(input => {
-        input.addEventListener("keydown", (e) => {
-          const allowed = ["ArrowUp", "ArrowDown", "Tab", "Shift", "Control", "Alt", "Meta"];
-          if (allowed.includes(e.key)) return;
-
-          // Allow selection and copy/paste
-          if ((e.ctrlKey || e.metaKey) && ["a","c","v","x"].includes(e.key.toLowerCase())) return;
-          e.preventDefault();
-        });
-      });
-    }
-
-    updateCartBadge();
+  } catch (err) {
+    console.error("Error fetching song info:", err);
+    document.querySelector(".song-info").innerHTML =
+      "<p>Error loading song details.</p>";
   }
 }
