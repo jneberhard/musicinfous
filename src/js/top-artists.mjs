@@ -21,7 +21,7 @@ export async function loadTopArtists() {
     // Return simplified array
     return data.topartists.artist.map((artist) => ({
       name: artist.name,
-      url: artist.url || "#",
+      url: artist.url || "#", 
     }));
   } catch (err) {
     console.error("Failed to fetch top artists:", err);

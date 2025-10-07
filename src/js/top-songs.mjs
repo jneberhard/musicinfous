@@ -20,11 +20,7 @@ export async function loadTopSongs() {
     return data.tracks.track.map((track) => ({
       title: track.name,
       artist: track.artist.name,
-      url: track.url || "#",
-      image:
-        track.image?.[2]?.["#text"] || // medium size image
-        track.image?.[1]?.["#text"] || // fallback to smaller one
-        "",
+      url: track.url || "#", 
     }));
   } catch (err) {
     console.error("Failed to fetch top tracks:", err);
