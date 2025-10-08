@@ -1,81 +1,84 @@
-// artist-scripts.mjs
-const API_KEY = "3479d48246e74981bf9426d21276ae3d";
+const LASTFM_API_KEY = "3479d48246e74981bf9426d21276ae3d";
 
-// Fetch artist info
-export async function fetchArtistInfo(artistName) {
+// Fetch artist info by name from MusicBrainz
+export async function fetchArtistInfo(name) {
   try {
-    const response = await fetch(
-      `https://theaudiodb.com/api/v1/json/${API_KEY}/search.php?s=${encodeURIComponent(artistName)}`
-    );
-
-    if (!response.ok) {
-      throw new Error(`API error! Status: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    if (!data.artists || data.artists.length === 0) {
-      return { bio: "No biography available.", url: "#" };
-    }
-
-    const artist = data.artists[0];
-    return {
-      bio: artist.strBiographyEN || "No biography available.",
-      url: artist.strWebsite || "#",
-    };
-  } catch (error) {
-    console.error("Failed to fetch artist info:", error);
-    return { bio: "Failed to load artist info.", url: "#" };
+    const res = await fetch(`https://musicbrainz.org/ws/2/artist?query=${encodeURIComponent(name)}&fmt=json&limit=1`);
+    if (!res.ok) throw new Error("MusicBrainz error");
+    const data = await res.json();
+    return data.artists?.[0] || null;
+  } catch (err) {
+    console.error("Failed to fetch artist info:", err);
+    return null;
   }
 }
 
-// Fetch top tracks for artist
-export async function fetchTopTracks(artistName) {
+// Fetch popular tracks from Last.fm
+export async function fetchTopSongs(artistName, limit = 20) {
   try {
-    const response = await fetch(
-      `https://theaudiodb.com/api/v1/json/${API_KEY}/track-top10.php?s=${encodeURIComponent(artistName)}`
-    );
+    const res = await fetch(`https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${encodeURIComponent(artistName)}&api_key=${LASTFM_API_KEY}&format=json`);
+    const data = await res.json();
+    const bio = data.artist?.bio?.summary || "";
 
-    if (!response.ok) {
-      throw new Error(`API error! Status: ${response.status}`);
-    }
+    const tracksRes = await fetch(`https://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks&artist=${encodeURIComponent(artistName)}&api_key=${LASTFM_API_KEY}&format=json&limit=${limit}`);
+    const tracksData = await tracksRes.json();
+    let topTracks = tracksData.toptracks?.track || [];
+    const seen = new Set();
+    topTracks = topTracks.filter(track => {
+      if (seen.has(track.name)) return false;
+      seen.add(track.name);
+      return true;
+    });
 
-    const data = await response.json();
-
-    if (!data.track) return [];
-
-    return data.track.map(track => ({
-      name: track.strTrack,
-      url: track.strMusicVid || "#",
-    }));
-  } catch (error) {
-    console.error("Failed to fetch top tracks:", error);
-    return [];
+    return { bio, topTracks };
+  } catch (err) {
+    console.error("Failed to fetch artist details:", err);
+    return { bio: "", topTracks: [] };
   }
 }
 
-// Fetch top albums for artist
-export async function fetchTopAlbums(artistName) {
-  try {
-    const response = await fetch(
-      `https://theaudiodb.com/api/v1/json/${API_KEY}/searchalbum.php?s=${encodeURIComponent(artistName)}`
-    );
 
-    if (!response.ok) {
-      throw new Error(`API error! Status: ${response.status}`);
-    }
+// Initialize artist page
+export async function initArtistPage() {
+  const params = new URLSearchParams(window.location.search);
+  const artistName = params.get("name");
+  if (!artistName) return;
 
-    const data = await response.json();
+  const container = document.getElementById("artist-page-container");
+  if (!container) return;
 
-    if (!data.album) return [];
+  container.innerHTML = `<p>Loading artist info...</p>`;
 
-    return data.album.map(album => ({
-      title: album.strAlbum,
-      year: album.intYearReleased,
-      url: album.strAlbumThumb || "#",
-    }));
-  } catch (error) {
-    console.error("Failed to fetch top albums:", error);
-    return [];
+  const artist = await fetchArtistInfo(artistName);
+  if (!artist) {
+    container.innerHTML = "<p>Artist not found.</p>";
+    return;
   }
+
+  const { bio, topTracks } = await fetchTopSongs(artistName);
+
+  if (!topTracks.length) {
+    container.innerHTML = `
+      <h2>${artist.name}</h2>
+      <p>${bio}</p>
+      <p>No top songs found.</p>
+    `;
+    return;
+  }
+
+  container.innerHTML = `
+    <h2>${artist.name}</h2>
+    <p>${bio}</p>
+    <h3>Top Songs</h3>
+    <ul id="artist-songs-list">
+      ${topTracks.map((track, index) => `
+        <li>
+            ${index + 1}.
+          <a href="/song/song.html?title=${encodeURIComponent(track.name)}&artist=${encodeURIComponent(artist.name)}">
+            ${track.name}
+          </a>
+        </li>
+      `).join("")}
+    </ul>
+  `;
 }

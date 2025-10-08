@@ -1,7 +1,8 @@
 {
-  "name": "wdd330-team6-outside",
+  "name": "musicinfo",
   "version": "2.0.0",
-  "description": "WDD 330 SleepOutside project for BYU-Pathway Worldwide (Team 6)",
+  "type": "module",
+  "description": "MusicInfo",
   "main": "main.js",
   "scripts": {
     "start": "vite",
@@ -16,13 +17,7 @@
     "setup-husky": "npx husky init"
   },
   "authors": [
-    "Shane Thompson",
-    "Vanessa Yang",
-    "Amon Roca",
-    "Oluwayemi Oni",
-    "Bryan Santana",
-    "James Eberhard",
-    "Bryan Hunter"
+    "James Eberhard"
   ],
   "license": "ISC",
   "devDependencies": {

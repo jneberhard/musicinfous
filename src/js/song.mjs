@@ -92,6 +92,11 @@ export async function renderSongPage() {
   const container = document.getElementById("song-info");
   if (!container) return;
 
+  if (!title || !artist) {
+    container.innerHTML = "<p>No song selected.</p>";
+    return;
+  }
+
   container.innerHTML = "<p>Loading song info...</p>";
 
   const [songData, coverArt] = await Promise.all([
@@ -103,6 +108,9 @@ export async function renderSongPage() {
     container.innerHTML = "<p>Song information not found.</p>";
     return;
   }
+
+  songData.artist = artist;
+  
   // try to find on youtube
   const youtubeQuery = encodeURIComponent(`${artist} ${title}`);
   const youtubeUrl = `https://www.youtube.com/results?search_query=${youtubeQuery}`;

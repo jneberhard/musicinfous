@@ -18,14 +18,12 @@ export async function fetchArtistInfo(artistName) {
     if (!artist) {
       return {
         name: artistName,
-        image: "https://via.placeholder.com/150?text=Artist",
         bio: "No biography available.",
       };
     }
 
     return {
       name: artist.name,
-      image: "https://via.placeholder.com/150?text=Artist",
       bio: artist.disambiguation || "No biography available.",
     };
 
@@ -33,7 +31,6 @@ export async function fetchArtistInfo(artistName) {
     console.warn("Failed to fetch artist details:", err);
     return {
       name: artistName,
-      image: "https://via.placeholder.com/150?text=Artist",
       bio: "Error fetching artist info.",
     };
   }
@@ -57,14 +54,13 @@ export async function renderArtistsPage(query, container) {
     if (!artistName || seen.has(artistName.toLowerCase())) continue;
     seen.add(artistName.toLowerCase());
 
-    const { image, bio } = await fetchArtistInfo(artistName);
+    const { bio } = await fetchArtistInfo(artistName);
 
     const card = document.createElement("a");
     card.href = `/artist/artist.html?name=${encodeURIComponent(artistName)}`;
     card.classList.add("artist-card");
 
     card.innerHTML = `
-      <img src="${image}" alt="${artistName}" />
       <div class="artist-info">
         <h3>${artistName}</h3>
         <p>${bio.slice(0, 120)}...</p>
