@@ -9,6 +9,7 @@ import { renderSongPage } from "./song.mjs";
 import { initTopsPage } from "./tops.mjs";
 import { renderSongResults } from "./songs.mjs";
 import { renderArtistsPage } from "./artists.mjs";
+import { initArtistPage } from "./artist.mjs";
 
 async function initMain() {
   await loadHeaderFooter();
@@ -49,6 +50,10 @@ async function initMain() {
       titleElem.textContent = `Artists matching "${query}"`;
       await renderArtistsPage(query, container);
     }
+  }
+  // artist page results
+  else if (path.endsWith("/artist.html")) {
+    await initArtistPage();
   }
   // main page
   else if (path.endsWith("index.html") || path === "/") {

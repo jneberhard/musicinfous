@@ -806,13 +806,18 @@ footer {
 #artist-results-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 16px; /* spacing between cards */
+  gap: 16px;
   margin-top: 20px;
 }
 
-/* Each song or artist card */
-.song-grid,
-.artist-grid {
+#artist-songs-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+/* Each song card */
+.song-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1rem;
@@ -820,8 +825,7 @@ footer {
   padding: 0;
 }
 
-.song-card,
-.artist-card {
+.song-card {
   display: flex;
   align-items: flex-start;
   gap: 12px; /* space between image and text */
@@ -837,15 +841,13 @@ footer {
 }
 
 /* Hover effect */
-.song-card:hover,
-.artist-card:hover {
+.song-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Thumbnail image */
-.song-card img,
-.artist-card img {
+.song-card img {
   width: 100px;
   height: 100px;
   object-fit: cover;
@@ -896,6 +898,25 @@ footer {
 }
 
 /* Artist name */
+.artist-card {
+  display: block;
+  padding: 6px 0;
+  border-bottom: 1px solid #ddd;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  text-decoration: none;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.artist-card:hover {
+  background-color: #f9f9f9;
+}
+.artist-card img {
+  display: none;
+}
+
 .artist-card .artist-info {
   font-weight: bold;
   font-size: 1rem;

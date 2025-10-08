@@ -39,9 +39,9 @@ export async function renderTopArtists() {
     topArtistsContainer.innerHTML = artists
       .slice(0, 50)
       .map(
-            (a, index) =>
+            (artist, index) =>
             `<li><span class="artist-rank">${index + 1}.</span>
-            <a href="/artist/artist.html?name=${encodeURIComponent(a.name)}">${a.name}</a>
+            <a href="/artist/artist.html?name=${encodeURIComponent(artist.name)}">${artist.name}</a>
             </li>`
       )
       .join("");
