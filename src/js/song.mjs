@@ -5,40 +5,53 @@ const LASTFM_API_KEY = "3479d48246e74981bf9426d21276ae3d";
 // info from musicBrainz
 export async function loadSongData(title, artist) {
   if (!title || !artist) return null;
+  const headers = {
+    "User-Agent": "MusicInfoApp/1.0 (jreberhard3@gmail.com)"
+  };
 
   const query = `${title} AND artist:${artist}`;
-  const url = `https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(
-    query
-  )}&fmt=json&limit=1&inc=artist-credits+releases+work-rels+work-level-rels`;
+  const url = `https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(query)}&fmt=json&limit=5&inc=artist-credits+releases+work-rels+artist-rels`;
 
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { headers });
     if (!response.ok) throw new Error(`MusicBrainz error: ${response.status}`);
-
     const data = await response.json();
     if (!data.recordings || data.recordings.length === 0) return null;
 
     const recording = data.recordings[0];
     const writerSet = new Set();
 
-    // Collect writers from recording relations
+    // Recording-level writers
     recording.relations?.forEach((rel) => {
       if (["composer", "writer", "lyricist"].includes(rel.type?.toLowerCase()) && rel.artist?.name) {
         writerSet.add(rel.artist.name);
       }
     });
 
-    // Collect writers from work-level relations
-    recording["work-rels"]?.forEach((workRel) => {
-      workRel.work?.relations?.forEach((r) => {
-        if (["composer", "writer", "lyricist"].includes(r.type?.toLowerCase()) && r.artist?.name) {
-          writerSet.add(r.artist.name);
-        }
-      });
-    });
-    const lengthSec = recording.length ? Math.floor(recording.length / 1000) : null; // seconds
+    // Work-level writers (via separate fetch)
+    const workRel = recording.relations?.find((rel) => rel.type === "performance" && rel.work?.id);
+    const workId = workRel?.work?.id;
+    console.log("Work ID:", workId);
+    if (workId) {
+      const workUrl = `https://musicbrainz.org/ws/2/work/${workId}?inc=artist-rels&fmt=json`;
+      const workResponse = await fetch(workUrl, { headers });
+      if (workResponse.ok) {
+        const workData = await workResponse.json();
+        console.log("Work Data:", workData); // ✅ Log full Work object
+        console.log("Work Relations:", workData.relations); // ✅ Log songwriter relationships
 
-    const writers = writerSet.size ? Array.from(writerSet).join(", ") : "Unknown";
+
+        workData.relations?.forEach((rel) => {
+          if (["composer", "writer", "lyricist"].includes(rel.type?.toLowerCase()) && rel.artist?.name) {
+            writerSet.add(rel.artist.name);
+          }
+        });
+      }
+    }
+
+    const lengthSec = recording.length ? Math.floor(recording.length / 1000) : null;
+    const writers = writerSet.size ? Array.from(writerSet).join(", ") : "Unknown Writer";
+
     return {
       title: recording.title,
       artist: recording["artist-credit"]?.[0]?.name || "Unknown",
@@ -46,6 +59,7 @@ export async function loadSongData(title, artist) {
       writers,
       releaseDate: recording.releases?.[0]?.date || "Unknown",
     };
+    
   } catch (err) {
     console.error("Failed to fetch song data:", err);
     return null;
@@ -55,7 +69,7 @@ export async function loadSongData(title, artist) {
 // get cover art from Last.fm
 
 export async function loadCoverArt(title, artist) {
-  if (!title || !artist) return "";
+  if (!title || !artist) return { image: "", url: "" };
   const url = `https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=${LASTFM_API_KEY}&artist=${encodeURIComponent(
     artist
   )}&track=${encodeURIComponent(title)}&format=json`;
@@ -65,15 +79,15 @@ export async function loadCoverArt(title, artist) {
     if (!response.ok) throw new Error(`Last.fm error: ${response.status}`);
     const data = await response.json();
 
-  return data.track?.album?.image?.[3]["#text"] || "";
+    return {
+      image: data.track?.album?.image?.[3]?.["#text"] || "",
+      url: data.track?.url || ""
+    };
   } catch (err) {
     console.warn("Failed to fetch cover art:", err);
     return "";
   }
 }
-
-
-
 
 // convert seconds to minutes and seconds
 function formatLength(seconds) {
@@ -99,10 +113,13 @@ export async function renderSongPage() {
 
   container.innerHTML = "<p>Loading song info...</p>";
 
-  const [songData, coverArt] = await Promise.all([
-    loadSongData(title, artist),
-    loadCoverArt(title, artist),
+  const [songData, coverArtData] = await Promise.all([
+  loadSongData(title, artist),
+  loadCoverArt(title, artist),
   ]);
+
+  const coverArt = coverArtData.image;
+  const lastfmUrl = coverArtData.url;
 
   if (!songData) {
     container.innerHTML = "<p>Song information not found.</p>";
@@ -110,11 +127,12 @@ export async function renderSongPage() {
   }
 
   songData.artist = artist;
-  
+
   // try to find on youtube
   const youtubeQuery = encodeURIComponent(`${artist} ${title}`);
   const youtubeUrl = `https://www.youtube.com/results?search_query=${youtubeQuery}`;
-
+  const geniusQuery = encodeURIComponent(`${artist} ${title} lyrics`);
+  const geniusUrl = `https://genius.com/search?q=${geniusQuery}`;
 
   container.innerHTML = `
     <div class="song-details-container">
@@ -124,10 +142,12 @@ export async function renderSongPage() {
         <p><strong>Length:</strong> ${formatLength(songData.lengthSec)}</p>
         <p><strong>Writers:</strong> ${songData.writers}</p>
         <p><strong>Release Date:</strong> ${songData.releaseDate}</p>
-        <p><a href="${youtubeUrl}" target="_blank" class="listen-link">Listen on YouTube</a></p>
+        <p><a href="${youtubeUrl}" target="_blank" class="listen-link">Listen on YouTube</a>
+        <a href="${lastfmUrl}" target="_blank" class="listen-link">View on Last.fm</a>
+        <a href="${geniusUrl}" target="_blank" class="listen-link">View Lyrics on Genius</a></p>
       </div>
       ${
-        coverArt
+        coverArtData
           ? `<div class="song-cover">
               <img src="${coverArt}" alt="${songData.title} album cover" class="album-art" />
             </div>`

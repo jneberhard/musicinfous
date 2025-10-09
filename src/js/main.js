@@ -10,6 +10,7 @@ import { initTopsPage } from "./tops.mjs";
 import { renderSongResults } from "./songs.mjs";
 import { renderArtistsPage } from "./artists.mjs";
 import { initArtistPage } from "./artist.mjs";
+import { renderGenre, loadGenres } from "./genre.mjs";
 
 async function initMain() {
   await loadHeaderFooter();
@@ -54,6 +55,12 @@ async function initMain() {
   // artist page results
   else if (path.endsWith("/artist.html")) {
     await initArtistPage();
+  }
+  // genre top artist and song page
+  else if (path.endsWith("/genre/genre.html")) {
+    renderGenre();
+  } else if (path.endsWith("genre/index.html")) {
+    loadGenres();
   }
   // main page
   else if (path.endsWith("index.html") || path === "/") {
