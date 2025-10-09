@@ -4,6 +4,7 @@ import cors from "cors";
 
 const app = express();
 const PORT = 3000;
+const API_KEY = "3479d48246e74981bf9426d21276ae3d";
 
 // Enable CORS for Vite dev server
 app.use(cors());
@@ -19,6 +20,46 @@ app.get("/api/top10/:artist", async (req, res) => {
     // eslint-disable-next-line no-console
     console.error("Error fetching top tracks:", error);
     res.status(500).json({ error: "Failed to fetch from TheAudioDB" });
+  }
+});
+
+// ✅ Fetch top songs by genre
+app.get("/api/genre-songs", async (req, res) => {
+  const genre = req.query.genre;
+  if (!genre) return res.status(400).json({ error: "Genre is required" });
+
+  try {
+    const response = await fetch(
+      `https://ws.audioscrobbler.com/2.0/?method=tag.gettoptracks&tag=${encodeURIComponent(
+        genre
+      )}&limit=20&api_key=${API_KEY}&format=json`
+    );
+
+    const data = await response.json();
+    res.json(data.toptracks?.track || []);
+  } catch (err) {
+    console.error("Error fetching genre songs:", err);
+    res.status(500).json({ error: "Failed to fetch songs" });
+  }
+});
+
+// ✅ Fetch top artists by genre
+app.get("/api/genre-artists", async (req, res) => {
+  const genre = req.query.genre;
+  if (!genre) return res.status(400).json({ error: "Genre is required" });
+
+  try {
+    const response = await fetch(
+      `https://ws.audioscrobbler.com/2.0/?method=tag.gettopartists&tag=${encodeURIComponent(
+        genre
+      )}&limit=20&api_key=${API_KEY}&format=json`
+    );
+
+    const data = await response.json();
+    res.json(data.topartists?.artist || []);
+  } catch (err) {
+    console.error("Error fetching genre artists:", err);
+    res.status(500).json({ error: "Failed to fetch artists" });
   }
 });
 

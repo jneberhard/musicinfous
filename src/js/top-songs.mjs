@@ -2,8 +2,10 @@ const API_KEY = "3479d48246e74981bf9426d21276ae3d";
 const TOP_SONGS_LIMIT = 50;
 
 // --- Fetch data from Last.fm ---
-export async function loadTopSongs() {
-  const url = `https://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=United%20States&api_key=${API_KEY}&format=json&limit=${TOP_SONGS_LIMIT}`;
+export async function loadTopSongs(genre = null) {
+  const method = genre ? "tag.getTopTracks" : "geo.gettoptracks";
+  const param = genre ? `tag=${encodeURIComponent(genre)}` : "country=United%20States";
+  const url = `https://ws.audioscrobbler.com/2.0/?method=${method}&${param}&api_key=${API_KEY}&format=json&limit=${TOP_SONGS_LIMIT}`;
 
   try {
     const response = await fetch(url);
@@ -12,15 +14,16 @@ export async function loadTopSongs() {
     }
 
     const data = await response.json();
-    if (!data.tracks?.track) {
+    const tracks = genre ? data.tracks?.track : data.tracks?.track;
+    if (!tracks) {
       throw new Error("No top tracks found.");
     }
 
-    // Return simplified array of songs
-    return data.tracks.track.map((track) => ({
+    return tracks.map((track) => ({
       title: track.name,
       artist: track.artist.name,
-      url: track.url || "#", 
+      url: track.url || "#",
+      image: track.image?.[2]?.["#text"] || track.image?.[1]?.["#text"] || "",
     }));
   } catch (err) {
     console.error("Failed to fetch top tracks:", err);
@@ -29,14 +32,14 @@ export async function loadTopSongs() {
 }
 
 // --- Render data into the page ---
-export async function renderTopSongs() {
+export async function renderTopSongs(genre = null) {
   const topSongsContainer = document.querySelector(".top-songs ul");
   if (!topSongsContainer) return;
 
   const isSongsPage = window.location.pathname.includes("songs.html");
 
   try {
-    const songs = await loadTopSongs();
+    const songs = await loadTopSongs(genre);
     topSongsContainer.innerHTML = songs
       .slice(0, 50)
       .map(

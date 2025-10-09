@@ -1,5 +1,6 @@
 import { renderTopSongs } from "./top-songs.mjs";
 import { renderTopArtists } from "./top-artists.mjs";
+import { renderGenre } from "./genre.mjs";
 
 export async function initTopsPage() {
   // Read category from URL query parameter
@@ -7,11 +8,12 @@ export async function initTopsPage() {
     const category = params.get("category");
     const topTitle = document.getElementById("top-title");
 
+    const topSongsDiv = document.querySelector(".top-songs");
+    const topArtistsDiv = document.querySelector(".top-artists");
+
     if (!topTitle) return;
 
         // Hide both sections initially
-    const topSongsDiv = document.querySelector(".top-songs");
-    const topArtistsDiv = document.querySelector(".top-artists");
     if (topSongsDiv) topSongsDiv.style.display = "none";
     if (topArtistsDiv) topArtistsDiv.style.display = "none";
 
@@ -28,7 +30,16 @@ export async function initTopsPage() {
         topArtistsDiv.style.display = "block";
         renderTopArtists();
         }
-    } else {
-        topTitle.textContent = "Top Music";
+    /*} else if (category){
+        topTitle.textContent = `Top ${category} Music`;
+        renderGenre(category);
+        if (topSongsDiv) {
+            topSongsDiv.style.display = "block";
+            renderTopSongs(category);
+        }
+        if (topArtistsDiv) {
+            topArtistsDiv.style.display = "block";
+            renderTopArtists(category);
+        }*/
   }
 }
