@@ -26,8 +26,7 @@ export async function fetchArtistInfo(artistName) {
       name: artist.name,
       bio: artist.disambiguation || "No biography available.",
     };
-
-    } catch (err) {
+  } catch (err) {
     console.warn("Failed to fetch artist details:", err);
     return {
       name: artistName,

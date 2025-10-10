@@ -1,0 +1,97 @@
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+
+  .center {
+    text-align: center;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+
+  .center h1 {
+    font-size: clamp(1.5rem, 6vw, 2.5rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .center h2 {
+    font-size: clamp(1rem, 4vw, 1.5rem);
+  }
+
+  .equalizer {
+    margin: 1rem 0;
+  }
+
+  .left,
+  .equalizer,
+  .center,
+  .right {
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 1rem;
+    justify-content: center;
+  }
+  .equalizer {
+    height: 50px;
+  }
+
+  .equalizer span {
+    width: 8px;
+  }
+
+  .info p {
+    padding-left: 0;
+  }
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-container > div {
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 1.5rem;
+  }
+
+  .social {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .footer-logo img {
+    height: 150px;
+  }
+
+  .social img {
+    height: 80px;
+  }
+
+  .hero {
+    grid-template-columns: 1fr; /* stack them vertically */
+  }
+
+  .hero .top-selection {
+    justify-content: center;
+  }
+
+  .hero .top-selection a {
+    flex: 1 1 100%; /* cards go full width on mobile */
+  }
+
+  .genre-selection {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .equalizer {
+    height: 40px;
+  }
+
+  .equalizer span {
+    width: 6px;
+  }
+}

@@ -38,6 +38,7 @@ app.get("/api/genre-songs", async (req, res) => {
     const data = await response.json();
     res.json(data.toptracks?.track || []);
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error("Error fetching genre songs:", err);
     res.status(500).json({ error: "Failed to fetch songs" });
   }
@@ -58,6 +59,7 @@ app.get("/api/genre-artists", async (req, res) => {
     const data = await response.json();
     res.json(data.topartists?.artist || []);
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error("Error fetching genre artists:", err);
     res.status(500).json({ error: "Failed to fetch artists" });
   }

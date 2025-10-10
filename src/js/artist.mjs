@@ -16,15 +16,19 @@ export async function fetchArtistInfo(name) {
 // Fetch popular tracks from Last.fm
 export async function fetchTopSongs(artistName, limit = 20) {
   try {
-    const res = await fetch(`https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${encodeURIComponent(artistName)}&api_key=${LASTFM_API_KEY}&format=json`);
+    const res = await fetch(
+      `https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${encodeURIComponent(artistName)}&api_key=${LASTFM_API_KEY}&format=json`
+    );
     const data = await res.json();
     const bio = data.artist?.bio?.summary || "";
 
-    const tracksRes = await fetch(`https://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks&artist=${encodeURIComponent(artistName)}&api_key=${LASTFM_API_KEY}&format=json&limit=${limit}`);
+    const tracksRes = await fetch(
+      `https://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks&artist=${encodeURIComponent(artistName)}&api_key=${LASTFM_API_KEY}&format=json&limit=${limit}`
+    );
     const tracksData = await tracksRes.json();
     let topTracks = tracksData.toptracks?.track || [];
     const seen = new Set();
-    topTracks = topTracks.filter(track => {
+    topTracks = topTracks.filter((track) => {
       if (seen.has(track.name)) return false;
       seen.add(track.name);
       return true;
@@ -36,7 +40,6 @@ export async function fetchTopSongs(artistName, limit = 20) {
     return { bio: "", topTracks: [] };
   }
 }
-
 
 // Initialize artist page
 export async function initArtistPage() {
@@ -71,14 +74,18 @@ export async function initArtistPage() {
     <p>${bio}</p>
     <h3>Top Songs</h3>
     <ul id="artist-songs-list">
-      ${topTracks.map((track, index) => `
+      ${topTracks
+        .map(
+          (track, index) => `
         <li>
             ${index + 1}.
           <a href="/song/song.html?title=${encodeURIComponent(track.name)}&artist=${encodeURIComponent(artist.name)}">
             ${track.name}
           </a>
         </li>
-      `).join("")}
+      `
+        )
+        .join("")}
     </ul>
   `;
 }

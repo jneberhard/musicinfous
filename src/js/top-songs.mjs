@@ -1,5 +1,5 @@
 const API_KEY = "3479d48246e74981bf9426d21276ae3d";
-const TOP_SONGS_LIMIT = 50;
+const TOP_SONGS_LIMIT = 30;
 
 // --- Fetch data from Last.fm ---
 export async function loadTopSongs(genre = null) {
@@ -41,7 +41,7 @@ export async function renderTopSongs(genre = null) {
   try {
     const songs = await loadTopSongs(genre);
     topSongsContainer.innerHTML = songs
-      .slice(0, 50)
+      .slice(0, 30)
       .map(
         (s, index) => `
           <li>
@@ -49,11 +49,7 @@ export async function renderTopSongs(genre = null) {
             <a href="/song/song.html?title=${encodeURIComponent(s.title)}&artist=${encodeURIComponent(
               s.artist
             )}" class="song-link">
-              ${
-                isSongsPage && s.image
-                  ? `<img src="${s.image}" alt="${s.title} album art" class="song-thumb" />`
-                  : ""
-              }
+              ${isSongsPage && s.image ? `<img src="${s.image}" alt="${s.title} album art" class="song-thumb" />` : ""}
               <span class="song-title">${s.title}</span>
             </a>
             <span class="song-artist"> — ${s.artist}</span>

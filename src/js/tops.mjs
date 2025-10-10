@@ -4,32 +4,32 @@ import { renderGenre } from "./genre.mjs";
 
 export async function initTopsPage() {
   // Read category from URL query parameter
-    const params = new URLSearchParams(window.location.search);
-    const category = params.get("category");
-    const topTitle = document.getElementById("top-title");
+  const params = new URLSearchParams(window.location.search);
+  const category = params.get("category");
+  const topTitle = document.getElementById("top-title");
 
-    const topSongsDiv = document.querySelector(".top-songs");
-    const topArtistsDiv = document.querySelector(".top-artists");
+  const topSongsDiv = document.querySelector(".top-songs");
+  const topArtistsDiv = document.querySelector(".top-artists");
 
-    if (!topTitle) return;
+  if (!topTitle) return;
 
-        // Hide both sections initially
-    if (topSongsDiv) topSongsDiv.style.display = "none";
-    if (topArtistsDiv) topArtistsDiv.style.display = "none";
+  // Hide both sections initially
+  if (topSongsDiv) topSongsDiv.style.display = "none";
+  if (topArtistsDiv) topArtistsDiv.style.display = "none";
 
-            // Render based on category
-    if (category === "Top Songs") {
-        topTitle.textContent = "Top Songs";
-        if (topSongsDiv) {
-        topSongsDiv.style.display = "block";
-        renderTopSongs();
-        }
-    } else if (category === "Top Artists") {
-        topTitle.textContent = "Top Artists";
-        if (topArtistsDiv) {
-        topArtistsDiv.style.display = "block";
-        renderTopArtists();
-        }
+  // Render based on category
+  if (category === "Top Songs") {
+    topTitle.textContent = "Top Songs";
+    if (topSongsDiv) {
+      topSongsDiv.style.display = "block";
+      renderTopSongs();
+    }
+  } else if (category === "Top Artists") {
+    topTitle.textContent = "Top Artists";
+    if (topArtistsDiv) {
+      topArtistsDiv.style.display = "block";
+      renderTopArtists();
+    }
     /*} else if (category){
         topTitle.textContent = `Top ${category} Music`;
         renderGenre(category);
