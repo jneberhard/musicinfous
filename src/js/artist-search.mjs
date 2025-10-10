@@ -24,8 +24,7 @@ export async function searchArtists(query) {
     return data.results.artistmatches.artist.map((artist) => ({
       name: artist.name,
       url: artist.url || "#",
-      image:
-        artist.image?.find((img) => img.size === "large")?.["#text"] || "",
+      image: artist.image?.find((img) => img.size === "large")?.["#text"] || "",
       listeners: artist.listeners,
     }));
   } catch (err) {

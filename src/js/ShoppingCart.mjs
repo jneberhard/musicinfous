@@ -31,12 +31,10 @@ export async function renderSongDetails() {
         <p><a href="${data.track.url}" target="_blank">View on Last.fm</a></p>
       `;
     } else {
-      document.querySelector(".song-info").innerHTML =
-        "<p>Details not available.</p>";
+      document.querySelector(".song-info").innerHTML = "<p>Details not available.</p>";
     }
   } catch (err) {
     console.error("Error fetching song info:", err);
-    document.querySelector(".song-info").innerHTML =
-      "<p>Error loading song details.</p>";
+    document.querySelector(".song-info").innerHTML = "<p>Error loading song details.</p>";
   }
 }

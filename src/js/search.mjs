@@ -38,7 +38,7 @@ export function initSearchModal() {
     if (event.target === modal) modal.style.display = "none";
   });
 
-  //  Handle search submission 
+  //  Handle search submission
   searchSubmit.addEventListener("click", async () => {
     const query = searchInput.value.trim();
     if (!query) return;
@@ -47,11 +47,11 @@ export function initSearchModal() {
 
     if (currentSearchType === "artists") {
       window.location.href = `/artist/artists.html?query=${encodedQuery}`;
-      } else if (currentSearchType === "songs") {
+    } else if (currentSearchType === "songs") {
       window.location.href = `/song/songs.html?query=${encodedQuery}`;
-      } else {
-        searchResults.innerHTML = "<p>Please select Songs or Artists first.</p>";
-      }
+    } else {
+      searchResults.innerHTML = "<p>Please select Songs or Artists first.</p>";
+    }
   });
   //return key to search also
   searchInput.addEventListener("keydown", (event) => {
@@ -94,7 +94,11 @@ async function albumCover(songTitle, artistName) {
 
     const data = await res.json();
     // Try large image first, fallback to medium
-    return data.track?.album?.image?.[3]["#text"] || data.track?.album?.image?.[2]["#text"] || "https://via.placeholder.com/100?text=Song";
+    return (
+      data.track?.album?.image?.[3]["#text"] ||
+      data.track?.album?.image?.[2]["#text"] ||
+      "https://via.placeholder.com/100?text=Song"
+    );
   } catch (err) {
     console.warn("Failed to fetch Last.fm cover:", err);
     return "https://via.placeholder.com/100?text=Song";
@@ -132,7 +136,6 @@ export async function renderSongResults(query, container) {
     container.appendChild(li);
   }
 }
-
 
 //   show artists
 export async function renderArtistResults(query, container, returnData = false) {
@@ -190,7 +193,6 @@ export async function renderArtistResults(query, container, returnData = false) 
     });
 
     return uniqueArtists;
-
   } catch (error) {
     console.error("Failed to fetch artist results:", error);
     container.innerHTML = "<p>Error loading artists. Please try again later.</p>";

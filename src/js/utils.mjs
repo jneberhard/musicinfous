@@ -30,22 +30,14 @@ export function getParam(param) {
   return urlParams.get(param);
 }
 
-export function renderListWithTemplate(
-  template,
-  parentElement,
-  list,
-  position = "afterbegin",
-  clear = false
-) {
+export function renderListWithTemplate(template, parentElement, list, position = "afterbegin", clear = false) {
   const safeList = Array.isArray(list) ? list : list ? [list] : [];
 
   if (clear) {
     parentElement.innerHTML = "";
   }
 
-  if (safeList.length === 0) 
-    return;
-  
+  if (safeList.length === 0) return;
 
   const htmlStrings = safeList.map(template);
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
