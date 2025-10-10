@@ -1,6 +1,5 @@
 import { renderTopSongs } from "./top-songs.mjs";
 import { renderTopArtists } from "./top-artists.mjs";
-import { renderGenre } from "./genre.mjs";
 
 export async function initTopsPage() {
   // Read category from URL query parameter
@@ -30,16 +29,5 @@ export async function initTopsPage() {
       topArtistsDiv.style.display = "block";
       renderTopArtists();
     }
-    /*} else if (category){
-        topTitle.textContent = `Top ${category} Music`;
-        renderGenre(category);
-        if (topSongsDiv) {
-            topSongsDiv.style.display = "block";
-            renderTopSongs(category);
-        }
-        if (topArtistsDiv) {
-            topArtistsDiv.style.display = "block";
-            renderTopArtists(category);
-        }*/
   }
 }
