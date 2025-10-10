@@ -1,4 +1,4 @@
-import express from "express";
+/*import express from "express";
 import fetch from "node-fetch";
 import cors from "cors";
 
@@ -22,9 +22,9 @@ app.get("/api/top10/:artist", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch from TheAudioDB" });
   }
 });
-
-// ✅ Fetch top songs by genre
-app.get("/api/genre-songs", async (req, res) => {
+*/
+//  Fetch top songs by genre
+/*app.get("/api/genre-songs", async (req, res) => {
   const genre = req.query.genre;
   if (!genre) return res.status(400).json({ error: "Genre is required" });
 
@@ -44,7 +44,7 @@ app.get("/api/genre-songs", async (req, res) => {
   }
 });
 
-// ✅ Fetch top artists by genre
+// Fetch top artists by genre
 app.get("/api/genre-artists", async (req, res) => {
   const genre = req.query.genre;
   if (!genre) return res.status(400).json({ error: "Genre is required" });
@@ -68,4 +68,4 @@ app.get("/api/genre-artists", async (req, res) => {
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
   console.log(`Server running at http://localhost:${PORT}`);
-});
+});*/
