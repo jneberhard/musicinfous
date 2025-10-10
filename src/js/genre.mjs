@@ -50,7 +50,7 @@ async function loadTopSongs(genreTag) {
   }));
 }
 
-//export this
+//export this to render
 
 export async function renderGenre() {
   const pathParts = window.location.pathname.split("/");
