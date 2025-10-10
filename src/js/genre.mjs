@@ -50,11 +50,11 @@ async function loadTopSongs(genreTag) {
   }));
 }
 
-//export this to render
+//export this
 
 export async function renderGenre() {
-  const pathParts = window.location.pathname.split("/");
-  const genre = pathParts[pathParts.length - 1];
+  const params = new URLSearchParams(window.location.search);
+  const genre = params.get("category");
   if (!genre) return;
 
   const genreTag = genreMap[genre] || genre.toLowerCase();
