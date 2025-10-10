@@ -53,7 +53,7 @@ async function loadTopSongs(genreTag) {
 //export this
 
 export async function renderGenre() {
-  const pathParts = window.location.pathname.split('/');
+  const pathParts = window.location.pathname.split("/");
   const genre = pathParts[pathParts.length - 1];
   if (!genre) return;
 
