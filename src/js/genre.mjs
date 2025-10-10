@@ -1,5 +1,5 @@
 const API_KEY = "3479d48246e74981bf9426d21276ae3d";
-const TOP_LIMIT = 40;
+const TOP_LIMIT = 25;
 
 const genreMap = {
   Pop: "pop",
@@ -10,11 +10,11 @@ const genreMap = {
 
 //search top artist for selected genre -------------------------------------------------
 
-
 // --- Fetch top artists ---
 async function loadTopArtists(genreTag) {
   const url = `https://ws.audioscrobbler.com/2.0/?method=tag.gettopartists&tag=${encodeURIComponent(
-    genreTag)}&api_key=${API_KEY}&format=json&limit=${TOP_LIMIT}`;
+    genreTag
+  )}&api_key=${API_KEY}&format=json&limit=${TOP_LIMIT}`;
 
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Error fetching top artists: ${response.status}`);
@@ -28,8 +28,6 @@ async function loadTopArtists(genreTag) {
     image: artist.image?.[2]?.["#text"] || "",
   }));
 }
-
-
 
 // search top songs for selected genre
 // Fetch data from Last.fm
@@ -73,10 +71,7 @@ export async function renderGenre() {
   titleEl.textContent = `Top ${genre} Songs & Artists`;
 
   try {
-    const [songs, artists] = await Promise.all([
-      loadTopSongs(genreTag),
-      loadTopArtists(genreTag),
-    ]);
+    const [songs, artists] = await Promise.all([loadTopSongs(genreTag), loadTopArtists(genreTag)]);
 
     // Render songs
     songsEl.innerHTML = songs
@@ -85,8 +80,8 @@ export async function renderGenre() {
         <li>
           <span class="rank">${i + 1}.</span>
           <a href="/song/song.html?title=${encodeURIComponent(s.title)}&artist=${encodeURIComponent(
-          s.artist
-        )}">${s.title}</a>
+            s.artist
+          )}">${s.title}</a>
           <span class="artist"> — ${s.artist}</span>
         </li>`
       )
@@ -108,7 +103,7 @@ export async function renderGenre() {
     artistsEl.innerHTML = "<li>Unable to load artists for this genre.</li>";
   }
 }
-   // getting genres for the drop down
+// getting genres for the drop down
 export async function loadGenres() {
   const url = `https://ws.audioscrobbler.com/2.0/?method=chart.gettoptags&api_key=${API_KEY}&format=json`;
 
@@ -125,14 +120,14 @@ export async function loadGenres() {
       return;
     }
 
-    dropdown.innerHTML = "<option value=\"\" selected disabled>Choose a genre...</option>";
+    dropdown.innerHTML = '<option value="" selected disabled>Choose a genre...</option>';
 
-    genres.forEach(tag => {
+    genres.forEach((tag) => {
       const option = document.createElement("option");
       const capitalized = tag.name
         .toLowerCase()
         .split(" ")
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(" ");
 
       option.value = tag.name;
@@ -146,7 +141,6 @@ export async function loadGenres() {
         window.location.href = `/genre/genre.html?category=${encodeURIComponent(selectedGenre)}`;
       }
     });
-
   } catch (err) {
     console.error("Error loading genres:", err);
     const dropdown = document.getElementById("genreSelect");

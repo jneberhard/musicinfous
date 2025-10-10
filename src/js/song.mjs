@@ -1,12 +1,11 @@
 //getting song information from musicBrainz and art information from last.fm
 const LASTFM_API_KEY = "3479d48246e74981bf9426d21276ae3d";
 
-
 // info from musicBrainz
 export async function loadSongData(title, artist) {
   if (!title || !artist) return null;
   const headers = {
-    "User-Agent": "MusicInfoApp/1.0 (jreberhard3@gmail.com)"
+    "User-Agent": "MusicInfoApp/1.0 (jreberhard3@gmail.com)",
   };
 
   const query = `${title} AND artist:${artist}`;
@@ -29,9 +28,16 @@ export async function loadSongData(title, artist) {
     });
 
     // Work-level writers (via separate fetch)
-    const workRel = recording.relations?.find((rel) => rel.type === "performance" && rel.work?.id);
+    const workRel = recording.relations?.find(
+      (rel) => ["performance", "recording of", "arrangement of"].includes(rel.type?.toLowerCase()) && rel.work?.id
+    );
     const workId = workRel?.work?.id;
-    console.log("Work ID:", workId);
+
+    console.log(
+      "Work relations found:",
+      recording.relations?.map((r) => r.type)
+    );
+    console.log("Selected Work ID:", workId);
     if (workId) {
       const workUrl = `https://musicbrainz.org/ws/2/work/${workId}?inc=artist-rels&fmt=json`;
       const workResponse = await fetch(workUrl, { headers });
@@ -39,7 +45,6 @@ export async function loadSongData(title, artist) {
         const workData = await workResponse.json();
         console.log("Work Data:", workData); // ✅ Log full Work object
         console.log("Work Relations:", workData.relations); // ✅ Log songwriter relationships
-
 
         workData.relations?.forEach((rel) => {
           if (["composer", "writer", "lyricist"].includes(rel.type?.toLowerCase()) && rel.artist?.name) {
@@ -59,7 +64,6 @@ export async function loadSongData(title, artist) {
       writers,
       releaseDate: recording.releases?.[0]?.date || "Unknown",
     };
-    
   } catch (err) {
     console.error("Failed to fetch song data:", err);
     return null;
@@ -81,7 +85,7 @@ export async function loadCoverArt(title, artist) {
 
     return {
       image: data.track?.album?.image?.[3]?.["#text"] || "",
-      url: data.track?.url || ""
+      url: data.track?.url || "",
     };
   } catch (err) {
     console.warn("Failed to fetch cover art:", err);
@@ -97,7 +101,7 @@ function formatLength(seconds) {
   return `${mins}:${secs.toString().padStart(2, "0")}`;
 }
 
- // to render song details page
+// to render song details page
 export async function renderSongPage() {
   const params = new URLSearchParams(window.location.search);
   const title = params.get("title");
@@ -113,10 +117,7 @@ export async function renderSongPage() {
 
   container.innerHTML = "<p>Loading song info...</p>";
 
-  const [songData, coverArtData] = await Promise.all([
-  loadSongData(title, artist),
-  loadCoverArt(title, artist),
-  ]);
+  const [songData, coverArtData] = await Promise.all([loadSongData(title, artist), loadCoverArt(title, artist)]);
 
   const coverArt = coverArtData.image;
   const lastfmUrl = coverArtData.url;
@@ -133,6 +134,7 @@ export async function renderSongPage() {
   const youtubeUrl = `https://www.youtube.com/results?search_query=${youtubeQuery}`;
   const geniusQuery = encodeURIComponent(`${artist} ${title} lyrics`);
   const geniusUrl = `https://genius.com/search?q=${geniusQuery}`;
+  const wikiUrl = `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(`${artist} ${title}`)}`;
 
   container.innerHTML = `
     <div class="song-details-container">
@@ -144,7 +146,8 @@ export async function renderSongPage() {
         <p><strong>Release Date:</strong> ${songData.releaseDate}</p>
         <p><a href="${youtubeUrl}" target="_blank" class="listen-link">Listen on YouTube</a>
         <a href="${lastfmUrl}" target="_blank" class="listen-link">View on Last.fm</a>
-        <a href="${geniusUrl}" target="_blank" class="listen-link">View Lyrics on Genius</a></p>
+        <a href="${geniusUrl}" target="_blank" class="listen-link">View Lyrics on Genius</a>
+        <a href="${wikiUrl}" target="_blank" class="listen-link">Get info on Wikipedia</a></p>
       </div>
       ${
         coverArtData

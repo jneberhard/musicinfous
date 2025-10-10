@@ -1,5 +1,5 @@
 const API_KEY = "3479d48246e74981bf9426d21276ae3d";
-const TOP_ARTISTS_LIMIT = 50;
+const TOP_ARTISTS_LIMIT = 30;
 
 // --- Fetch top artists ---
 export async function loadTopArtists() {
@@ -37,10 +37,10 @@ export async function renderTopArtists() {
   try {
     const artists = await loadTopArtists();
     topArtistsContainer.innerHTML = artists
-      .slice(0, 50)
+      .slice(0, 30)
       .map(
-            (artist, index) =>
-            `<li><span class="artist-rank">${index + 1}.</span>
+        (artist, index) =>
+          `<li><span class="artist-rank">${index + 1}.</span>
             <a href="/artist/artist.html?name=${encodeURIComponent(artist.name)}">${artist.name}</a>
             </li>`
       )
