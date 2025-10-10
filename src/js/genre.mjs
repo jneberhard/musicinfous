@@ -138,7 +138,7 @@ export async function loadGenres() {
     dropdown.addEventListener("change", (e) => {
       const selectedGenre = e.target.value;
       if (selectedGenre) {
-        window.location.href = `/genre/${encodeURIComponent(selectedGenre.toLowerCase())}`;
+        window.location.href = `/genre/genre.html?category=${encodeURIComponent(selectedGenre)}`;
       }
     });
   } catch (err) {

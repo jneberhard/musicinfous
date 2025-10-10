@@ -4,7 +4,7 @@
   /* colors */
   --primary-color: yellow;
   --secondary-color: #525b0f;
-  --tertiary-color: #8a470c;
+  --tertiary-color: rgb(192, 124, 192);
   --light-grey: #d0d0d0;
   --dark-grey: #303030;
 
@@ -35,8 +35,25 @@ h3 {
   font-family: Merriweather, serif;
 }
 
+.search-modal-content h2 {
+  color: var(--dark-grey);
+}
+
+.song-details-container h2,
+.song-details-container p {
+  color: black;
+}
+
+#search-submit {
+  color: white;
+}
 ul {
   list-style-type: none;
+}
+
+.genre-selection h3,
+.focus-cards h3 {
+  color: var(--tertiary-color);
 }
 
 .logo img {
@@ -77,6 +94,15 @@ header .left img {
   min-height: 100px;
   height: clamp(50px, 10vw, 100px);
   width: auto;
+  transition:
+    transform 0.3s ease,
+    filter 0.3s ease;
+}
+
+header .left img:hover {
+  transform: scale(1.1); /* Slight zoom */
+  filter: brightness(1.2); /* Slightly brighter */
+  cursor: pointer;
 }
 
 header .center {
@@ -117,6 +143,26 @@ header .center h1 {
 
 p {
   padding: 0.75rem;
+}
+
+.menuLinks a {
+  display: inline-block;
+  padding: 8px 16px;
+  margin: 4px;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.menuLinks a:hover {
+  color: #ffcc00;
+  background-color: #333333;
+  border-color: #ffcc00;
+  transform: scale(1.1);
 }
 
 /*for the modal search */
@@ -395,6 +441,14 @@ button {
   margin: 0 auto;
   width: 50%;
   text-align: center;
+  color: black;
+}
+
+#results-title,
+h2,
+p,
+h3 {
+  color: yellow;
 }
 
 /*Focus card selection--------------------Focus card selection---------------------- */
