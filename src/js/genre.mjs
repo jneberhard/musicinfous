@@ -53,8 +53,8 @@ async function loadTopSongs(genreTag) {
 //export this
 
 export async function renderGenre() {
-  const params = new URLSearchParams(window.location.search);
-  const genre = params.get("category");
+  const pathParts = window.location.pathname.split('/');
+  const genre = pathParts[pathParts.length - 1];
   if (!genre) return;
 
   const genreTag = genreMap[genre] || genre.toLowerCase();
@@ -138,7 +138,7 @@ export async function loadGenres() {
     dropdown.addEventListener("change", (e) => {
       const selectedGenre = e.target.value;
       if (selectedGenre) {
-        window.location.href = `/genre/genre.html?category=${encodeURIComponent(selectedGenre)}`;
+        window.location.href = `/genre/${encodeURIComponent(selectedGenre.toLowerCase())}`;
       }
     });
   } catch (err) {

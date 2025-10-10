@@ -1,4 +1,4 @@
-/genre/genre    /genre/genre.html   200
+/genre/:genre    /genre/genre.html   200
 /*    /index.html   200
 /song/song      /song/song.html     200
 /artist/artist  /artist/artist.html 200
