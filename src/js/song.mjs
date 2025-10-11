@@ -1,4 +1,3 @@
-//getting song information from musicBrainz and art information from last.fm
 const LASTFM_API_KEY = "3479d48246e74981bf9426d21276ae3d";
 
 // info from musicBrainz
@@ -9,7 +8,9 @@ export async function loadSongData(title, artist) {
   };
 
   const query = `${title} AND artist:${artist}`;
-  const url = `https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(query)}&fmt=json&limit=10&inc=artist-credits+releases+work-rels+artist-rels`;
+  const url = `https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(
+    query
+  )}&fmt=json&limit=100&inc=artist-credits+releases+work-rels+artist-rels`;
 
   try {
     const response = await fetch(url, { headers });
@@ -17,52 +18,53 @@ export async function loadSongData(title, artist) {
     const data = await response.json();
     if (!data.recordings || data.recordings.length === 0) return null;
 
-    const recording = data.recordings[0];
-    const writerSet = new Set();
+    const filteredRecordings = data.recordings.filter((rec) => {
+      const artistCredit = rec["artist-credit"]?.[0]?.name?.toLowerCase().trim() || "";
+      const recTitle = rec.title?.toLowerCase().trim() || "";
+      const inputArtist = artist.toLowerCase().trim();
+      const inputTitle = title.toLowerCase().trim();
 
-    // Recording-level writers
-    recording.relations?.forEach((rel) => {
-      if (["composer", "writer", "lyricist"].includes(rel.type?.toLowerCase()) && rel.artist?.name) {
-        writerSet.add(rel.artist.name);
-      }
+      return (
+        artistCredit.includes(inputArtist) &&
+        (recTitle.includes(inputTitle) || inputTitle.includes(recTitle))
+      );
     });
 
-    // Work-level writers (via separate fetch)
-    const workRel = recording.relations?.find(
-      (rel) => ["performance", "recording of", "arrangement of"].includes(rel.type?.toLowerCase()) && rel.work?.id
-    );
-    const workId = workRel?.work?.id;
 
-    console.log(
-      "Work relations found:",
-      recording.relations?.map((r) => r.type)
-    );
-    console.log("Selected Work ID:", workId);
-    if (workId) {
-      const workUrl = `https://musicbrainz.org/ws/2/work/${workId}?inc=artist-rels&fmt=json`;
-      const workResponse = await fetch(workUrl, { headers });
-      if (workResponse.ok) {
-        const workData = await workResponse.json();
-        console.log("Work Data:", workData); // Log full Work object
-        console.log("Work Relations:", workData.relations); // Log songwriter relationships
+   // if (filteredRecordings.length === 0) return null;
 
-        workData.relations?.forEach((rel) => {
-          if (["composer", "writer", "lyricist"].includes(rel.type?.toLowerCase()) && rel.artist?.name) {
-            writerSet.add(rel.artist.name);
-          }
-        });
-      }
-    }
+    // Remove duplicates by title + artist
+    const seen = new Set();
+    const uniqueRecordings = filteredRecordings.filter((rec) => {
+      const artistName = rec["artist-credit"]?.[0]?.name || "Unknown";
+      const key = `${rec.title}-${artistName}`.toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+        // Sort all recordings by earliest release date
+        const recordings = uniqueRecordings
+          .map((rec) => {
+            const firstRelease = rec.releases?.[0];
+            const date = firstRelease?.date || "Not Listed"; // sort-friendly
+            return { ...rec, releaseDate: date };
+          })
+          .sort((a, b) => new Date(a.releaseDate) - new Date(b.releaseDate));   ///making it so it sorts it by dates
 
-    const lengthSec = recording.length ? Math.floor(recording.length / 1000) : null;
-    const writers = writerSet.size ? Array.from(writerSet).join(", ") : "Unknown Writer";
+    // Earliest and next recordings
+    const earliestRecording = recordings[0];
+    const otherRecordings = recordings.slice(1, 20);  // the (1, 20) number tells how many recordings to show
+
+    const lengthSec = earliestRecording.length
+      ? Math.floor(earliestRecording.length / 1000)
+      : null;
 
     return {
-      title: recording.title,
-      artist: recording["artist-credit"]?.[0]?.name || "Unknown",
+      title: earliestRecording.title,
+      artist: earliestRecording["artist-credit"]?.[0]?.name || "Unknown",
       lengthSec,
-      writers,
-      releaseDate: recording.releases?.[0]?.date || "Unknown",
+      releaseDate: earliestRecording.releases?.[0]?.date || "Unknown",
+      otherRecordings,
     };
   } catch (err) {
     console.error("Failed to fetch song data:", err);
@@ -71,7 +73,6 @@ export async function loadSongData(title, artist) {
 }
 
 // get cover art from Last.fm
-
 export async function loadCoverArt(title, artist) {
   if (!title || !artist) return { image: "", url: "" };
   const url = `https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=${LASTFM_API_KEY}&artist=${encodeURIComponent(
@@ -117,38 +118,62 @@ export async function renderSongPage() {
 
   container.innerHTML = "<p>Loading song info...</p>";
 
-  const [songData, coverArtData] = await Promise.all([loadSongData(title, artist), loadCoverArt(title, artist)]);
+  const [songData, coverArtData] = await Promise.all([
+    loadSongData(title, artist),
+    loadCoverArt(title, artist),
+  ]);
 
   const coverArt = coverArtData.image;
   const lastfmUrl = coverArtData.url;
 
   if (!songData) {
-    container.innerHTML = "<p>Song information not found.</p>";
+    container.innerHTML = `<p style="color: black;">Song information not found. Try searching by song.</p>`;
     return;
   }
 
   songData.artist = artist;
 
-  // try to find on youtube
+  // links
   const youtubeQuery = encodeURIComponent(`${artist} ${title}`);
   const youtubeUrl = `https://www.youtube.com/results?search_query=${youtubeQuery}`;
   const geniusQuery = encodeURIComponent(`${artist} ${title} lyrics`);
   const geniusUrl = `https://genius.com/search?q=${geniusQuery}`;
-  const wikiUrl = `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(`${artist} ${title}`)}`;
+  const wikiUrl = `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(
+    `${artist} ${title}`
+  )}`;
 
+  // render page
   container.innerHTML = `
     <div class="song-details-container">
       <div class="song-text">
         <h2>${songData.title}</h2>
         <p><strong>Artist:</strong> ${songData.artist}</p>
         <p><strong>Length:</strong> ${formatLength(songData.lengthSec)}</p>
-        <p><strong>Writers:</strong> ${songData.writers}</p>
-        <p><strong>Release Date:</strong> ${songData.releaseDate}</p>
-        <p><a href="${youtubeUrl}" target="_blank" class="listen-link">Listen on YouTube</a>
-        <a href="${lastfmUrl}" target="_blank" class="listen-link">View on Last.fm</a>
-        <a href="${geniusUrl}" target="_blank" class="listen-link">View Lyrics on Genius</a>
-        <a href="${wikiUrl}" target="_blank" class="listen-link">Get info on Wikipedia</a></p>
+        <p><strong>First Release:</strong> ${songData.releaseDate}</p>
+        <p><strong>Recordings: (Click on "view" to find more info, i.e. writers, publisher, etc.</strong></p>
+        ${
+          songData.otherRecordings?.length
+            ? `
+        <ul>
+          ${songData.otherRecordings
+            .map(
+              (r) =>
+                `<li><strong>${r.title}</strong> (${r.releaseDate}) — ${r["artist-credit"]?.[0]?.name || "Unknown Artist"}
+                <a href="https://musicbrainz.org/recording/${r.id}" target="_blank">[view]</a></li>`
+            )
+            .join("")}
+        </ul>`
+            : ""
+        }
+
+        <p>
+          <a href="${youtubeUrl}" target="_blank" class="listen-link">Listen on YouTube</a>
+          <a href="${lastfmUrl}" target="_blank" class="listen-link">View on Last.fm</a>
+          <a href="${geniusUrl}" target="_blank" class="listen-link">View Lyrics on Genius</a>
+          <a href="${wikiUrl}" target="_blank" class="listen-link">Get info on Wikipedia</a>
+        </p>
       </div>
+
       ${
         coverArtData
           ? `<div class="song-cover">
