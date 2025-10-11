@@ -4,13 +4,12 @@
     align-items: center;
     text-align: center;
     padding: 2rem 1rem;
+    justify-content: center;
   }
 
   .center {
     text-align: center;
-    word-wrap: break-word;
     overflow-wrap: break-word;
-    white-space: normal;
   }
 
   .center h1 {
@@ -25,6 +24,7 @@
   .equalizer {
     margin: 1rem 0;
     height: 50px;
+    justify-content: center;
   }
 
   .left,
@@ -34,7 +34,6 @@
     width: 100%;
     max-width: 500px;
     margin-bottom: 1rem;
-    justify-content: center;
   }
 
   .info p {

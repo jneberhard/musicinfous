@@ -9,7 +9,7 @@ export async function loadSongData(title, artist) {
   };
 
   const query = `${title} AND artist:${artist}`;
-  const url = `https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(query)}&fmt=json&limit=5&inc=artist-credits+releases+work-rels+artist-rels`;
+  const url = `https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(query)}&fmt=json&limit=10&inc=artist-credits+releases+work-rels+artist-rels`;
 
   try {
     const response = await fetch(url, { headers });
@@ -43,8 +43,8 @@ export async function loadSongData(title, artist) {
       const workResponse = await fetch(workUrl, { headers });
       if (workResponse.ok) {
         const workData = await workResponse.json();
-        console.log("Work Data:", workData); // ✅ Log full Work object
-        console.log("Work Relations:", workData.relations); // ✅ Log songwriter relationships
+        console.log("Work Data:", workData); // Log full Work object
+        console.log("Work Relations:", workData.relations); // Log songwriter relationships
 
         workData.relations?.forEach((rel) => {
           if (["composer", "writer", "lyricist"].includes(rel.type?.toLowerCase()) && rel.artist?.name) {
