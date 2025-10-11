@@ -112,7 +112,7 @@ export async function renderGenre() {
     artistsEl.innerHTML = "<li>Unable to load artists for this genre.</li>";
   }
 }
-// getting genres for the drop down
+// getting genres for the drop down ------------------------------------------------------
 export function loadGenres() {
   const dropdown = document.getElementById("genreSelect");
   if (!dropdown) {
@@ -120,9 +120,9 @@ export function loadGenres() {
     return;
   }
 
-  dropdown.innerHTML = '<option value="" selected disabled>Choose a genre...</option>';
+  const sortedGenres = [...genres].sort((a, b) => a.localeCompare(b));
 
-  genres.forEach((genre) => {
+  sortedGenres.forEach((genre) => {
     const option = document.createElement("option");
     option.value = genre;
     option.textContent = genre;
