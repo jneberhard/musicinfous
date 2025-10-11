@@ -34,6 +34,9 @@ h1,
 h3 {
   font-family: Merriweather, serif;
 }
+a {
+  text-decoration: none;
+}
 
 .search-modal-content h2 {
   color: var(--dark-grey);
@@ -77,7 +80,7 @@ ul {
   height: auto;
   gap: 1rem;
   padding: 1rem;
-  color: yellow;
+  color: var(--primary-color);
 }
 
 header {
@@ -111,14 +114,12 @@ header .center {
   text-align: center;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  white-space: normal;
 }
 
 header .center h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: Merriweather, serif;
 }
 
 .right {
@@ -224,7 +225,7 @@ footer {
   font-family: var(--font-body);
   font-size: 27px;
   text-align: center;
-  color: yellow;
+  color: var(--primary-color);
 }
 
 .footer-container {
@@ -254,7 +255,6 @@ footer {
 .footer-logo img {
   height: 170px;
   width: auto;
-  aspect-ratio: auto;
   object-fit: contain;
   margin-top: 10px;
 }
@@ -304,66 +304,67 @@ footer {
   display: grid;
   grid-template-columns: 1fr 2fr;
   align-items: center;
-  gap: 2rem;
-  padding: 2rem 0;
 }
 
-.hero .mission {
+.mission {
   display: flex;
-  width: 100%;
-  padding: 10px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
   max-width: 90%;
   margin: 0 auto;
   border-radius: 12px;
   background-color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: black;
   font-size: 1.25rem;
   line-height: 1.5;
+  opacity: 0.8;
 }
 
-.hero .mission p {
+.mission p {
+  border: 0;
   margin: 0;
   padding: 5px;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 95%;
   text-align: center;
 }
 
-.hero .top-selection {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 1.5rem;
-  align-items: start;
+.main-focus {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
 }
 
-.top-selection .listings-wrapper {
+.listings-wrapper,
+.focus-cards {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  align-items: center;
+  flex: 1;
 }
 
-.top-selection .focus-card {
+.top-songs h3,
+.top-artists h3 {
+  color: black;
   text-align: center;
+  font-size: larger;
 }
 
 .focus-card img {
-  width: 100%;
-  max-width: 200px;
+  width: auto;
   border-radius: 10px;
   display: block;
-  margin: 0 auto;
+  margin: 0 auto 10px;
+  height: 225px;
+  object-fit: contain;
 }
 
 .top-selection .top-songs,
 .top-selection .top-artists {
   background: #fff;
   border-radius: 8px;
-  padding: 1rem;
-  max-height: 150px;
+  max-height: 225px;
+  padding: 2px;
   overflow-y: auto;
   width: calc(100% - 10px);
   margin: 10px;
@@ -448,7 +449,7 @@ button {
 h2,
 p,
 h3 {
-  color: yellow;
+  color: var(--primary-color);
 }
 
 /*Focus card selection--------------------Focus card selection---------------------- */
@@ -504,7 +505,8 @@ h3 {
 }
 
 /* ---------- Artist Page ---------- */
-#artist-info {
+#artist-info,
+#song-info {
   background-color: #fff;
   padding: 2rem;
   border-radius: 12px;
@@ -533,13 +535,6 @@ h3 {
 }
 
 /* song page */
-#song-info {
-  background-color: #fff;
-  padding: 2rem;
-  border-radius: 12px;
-  margin: 2rem 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
 
 #song-info h1 {
   margin-bottom: 1rem;
@@ -566,12 +561,15 @@ h3 {
   display: flex;
   align-items: flex-start;
   gap: 2rem;
-  flex-wrap: wrap; /* keeps it responsive on smaller screens */
+  flex-wrap: wrap;
 }
-
 .song-text {
   flex: 1;
   min-width: 250px;
+}
+
+.artist-center {
+  text-align: center;
 }
 
 .song-cover {
@@ -599,7 +597,8 @@ h3 {
 }
 
 /* Each song card */
-.song-grid {
+.song-grid,
+.artist-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1rem;
@@ -607,10 +606,11 @@ h3 {
   padding: 0;
 }
 
-.song-card {
+.song-card,
+.artist-card {
   display: flex;
   align-items: flex-start;
-  gap: 12px; /* space between image and text */
+  gap: 12px;
   padding: 10px;
   background-color: #fff;
   border-radius: 8px;
@@ -622,14 +622,40 @@ h3 {
     box-shadow 0.2s;
 }
 
+.artist-card {
+  color: black;
+  text-decoration: none;
+}
+
+.artist-card .artist-info h3,
+.artist-card .artist-info p {
+  color: black;
+}
+
+.track-number {
+  color: white;
+}
+
+#artist-songs-list a {
+  color: var(--tertiary-color);
+  text-decoration: none;
+}
+
+#artist-songs-list a:hover {
+  color: blue;
+  text-decoration: underline;
+}
+
 /* Hover effect */
-.song-card:hover {
+.song-card:hover,
+.artist-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Thumbnail image */
-.song-card img {
+.song-card img,
+.artist-card img {
   width: 100px;
   height: 100px;
   object-fit: cover;
@@ -657,79 +683,16 @@ h3 {
   line-height: 1.2;
 }
 
-/* Responsive tweaks */
-@media (max-width: 768px) {
-  #results-container {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  }
-}
-
-@media (max-width: 480px) {
-  .song-card {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  .song-card img {
-    width: 80px;
-    height: 80px;
-  }
-  .song-card .song-info {
-    margin-top: 8px;
-  }
-}
-
-/* Artist name */
-.artist-card {
-  display: block;
-  padding: 6px 0;
-  border-bottom: 1px solid #ddd;
-  background: none;
-  box-shadow: none;
-  border-radius: 0;
-  text-decoration: none;
-  color: #333;
-  font-size: 1.1rem;
-}
-
-.artist-card:hover {
-  background-color: #f9f9f9;
-}
-.artist-card img {
-  display: none;
-}
-
-.artist-card .artist-info {
-  font-weight: bold;
-  font-size: 1rem;
-  line-height: 1.2;
-}
-
-/* Responsive tweaks */
-@media (max-width: 768px) {
-  #artist-results-container {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  }
-}
-
-@media (max-width: 480px) {
-  .artist-card {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  .artist-card img {
-    width: 80px;
-    height: 80px;
-  }
-  .artist-card .artist-info {
-    margin-top: 8px;
-  }
+.main-focus {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+  align-items: flex-start;
 }
 
 /* genre results */
 #top-title {
-  color: yellow;
+  color: var(--primary-color);
   text-align: center;
   font-size: 50px;
 }
@@ -778,19 +741,19 @@ h3 {
 .equalizer {
   display: flex;
   align-items: flex-end;
-  gap: 8px; /* space between bars */
+  gap: 8px;
   height: clamp(40px, 8vh, 100px);
 }
 
 .equalizer span {
   display: inline-block;
   width: clamp(6px, 1vw, 12px);
-  background: #ffcc00; /* bright yellow */
+  background: #ffcc00;
   border-radius: 4px;
   animation: bounce 1s infinite ease-in-out;
   box-shadow:
     0 0 10px #ffcc00,
-    /* glow effect */ 0 0 20px #ffcc00,
+    0 0 20px #ffcc00,
     0 0 30px #ffaa00;
 }
 
