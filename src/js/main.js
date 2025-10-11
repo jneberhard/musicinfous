@@ -59,7 +59,7 @@ async function initMain() {
   // genre top artist and song page
   else if (path.endsWith("/genre/genre.html")) {
     renderGenre();
-  } else if (path.endsWith("genre/index.html")) {
+  } else if (path.endsWith("/genre/") || path.endsWith("/genre/index.html")) {
     loadGenres();
   }
   // main page
