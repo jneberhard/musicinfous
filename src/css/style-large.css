@@ -24,6 +24,7 @@
 
   .equalizer {
     margin: 1rem 0;
+    height: 50px;
   }
 
   .left,
@@ -34,13 +35,6 @@
     max-width: 500px;
     margin-bottom: 1rem;
     justify-content: center;
-  }
-  .equalizer {
-    height: 50px;
-  }
-
-  .equalizer span {
-    width: 8px;
   }
 
   .info p {
@@ -70,19 +64,53 @@
   }
 
   .hero {
-    grid-template-columns: 1fr; /* stack them vertically */
+    grid-template-columns: 1fr;
   }
 
-  .hero .top-selection {
+  .hero .top-selection,
+  .genre-selection {
     justify-content: center;
   }
 
   .hero .top-selection a {
-    flex: 1 1 100%; /* cards go full width on mobile */
+    flex: 1 1 100%;
   }
 
-  .genre-selection {
-    justify-content: center;
+  #artist-results-container,
+  #results-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .main-focus {
+    flex-direction: column;
+  }
+
+  /* Reorder elements for mobile layout */
+  .focus-cards {
+    order: 1;
+  }
+
+  .top-songs {
+    order: 2;
+  }
+
+  .top-artists {
+    order: 4;
+  }
+
+  .focus-cards a:nth-child(2) {
+    order: 3;
+  }
+
+  /* Optional: make each section full width */
+  .focus-cards,
+  .listings-wrapper,
+  .top-songs,
+  .top-artists {
+    width: 100%;
+    align-items: center;
   }
 }
 
@@ -93,5 +121,21 @@
 
   .equalizer span {
     width: 6px;
+  }
+
+  .artist-card,
+  .song-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .artist-card img,
+  .song-card img {
+    width: 80px;
+    height: 80px;
+  }
+  .artist-card .artist-info,
+  .song-card .song-info {
+    margin-top: 8px;
   }
 }

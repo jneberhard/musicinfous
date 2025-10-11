@@ -38,7 +38,6 @@ export function initSearchModal() {
     if (event.target === modal) modal.style.display = "none";
   });
 
-  //  Handle search submission
   searchSubmit.addEventListener("click", async () => {
     const query = searchInput.value.trim();
     if (!query) return;
@@ -93,7 +92,6 @@ async function albumCover(songTitle, artistName) {
     if (!res.ok) throw new Error("Last.fm API error");
 
     const data = await res.json();
-    // Try large image first, fallback to medium
     return (
       data.track?.album?.image?.[3]["#text"] ||
       data.track?.album?.image?.[2]["#text"] ||
@@ -113,7 +111,7 @@ export async function renderSongResults(query, container) {
     return;
   }
 
-  container.innerHTML = ""; // clear container
+  container.innerHTML = "";
 
   for (const r of recordings) {
     const li = document.createElement("li");
@@ -142,9 +140,7 @@ export async function renderArtistResults(query, container, returnData = false) 
   if (!query || !container) return [];
 
   try {
-    console.log("Searching artists for:", query);
-
-    const url = `https://musicbrainz.org/ws/2/artist?query=${encodeURIComponent(query)}&fmt=json&limit=50`;
+    const url = `https://musicbrainz.org/ws/2/artist?query=${encodeURIComponent(query)}&fmt=json&limit=40`;
     const response = await fetch(url);
 
     if (!response.ok) {
@@ -152,17 +148,15 @@ export async function renderArtistResults(query, container, returnData = false) 
     }
 
     const data = await response.json();
-    console.log("MusicBrainz data:", data); // 👈 See what the API actually sends back
-
     const artists = data.artists ?? [];
 
-    // ✅ Handle case: empty results
+    //  Handle case: empty results
     if (artists.length === 0) {
       container.innerHTML = "<p>No artists found.</p>";
       return [];
     }
 
-    // ✅ Remove duplicates
+    //  Remove duplicates
     const seen = new Set();
     const uniqueArtists = artists.filter((artist) => {
       const name = artist.name?.toLowerCase();
@@ -171,12 +165,10 @@ export async function renderArtistResults(query, container, returnData = false) 
       return true;
     });
 
-    // ✅ Return data for other modules if requested
     if (returnData) {
       return uniqueArtists;
     }
 
-    // ✅ Otherwise, render to DOM
     container.innerHTML = "";
     uniqueArtists.forEach((artist) => {
       const li = document.createElement("li");

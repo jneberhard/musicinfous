@@ -70,6 +70,7 @@ export async function initArtistPage() {
   }
 
   container.innerHTML = `
+  <div class="artist-center">
     <h2>${artist.name}</h2>
     <p>${bio}</p>
     <h3>Top Songs</h3>
@@ -78,7 +79,7 @@ export async function initArtistPage() {
         .map(
           (track, index) => `
         <li>
-            ${index + 1}.
+          <span class="track-number">${index + 1}.</span>
           <a href="/song/song.html?title=${encodeURIComponent(track.name)}&artist=${encodeURIComponent(artist.name)}">
             ${track.name}
           </a>
@@ -87,5 +88,6 @@ export async function initArtistPage() {
         )
         .join("")}
     </ul>
+  </div>
   `;
 }
