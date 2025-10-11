@@ -1,6 +1,15 @@
 const API_KEY = "3479d48246e74981bf9426d21276ae3d";
 const TOP_LIMIT = 25;
 
+const genres = [
+  "Pop", "Rock", "Hip Hop", "Jazz", "Classical", "Electronic", "Country", "Reggae", "Blues", "R&B",
+  "Indie", "Metal", "Punk", "Soul", "Folk", "Disco", "Funk", "Alternative", "Latin", "World",
+  "Reggaeton", "K-Pop", "EDM", "House", "Techno", "Trance", "Dubstep", "Trap", "Ambient", "Psychedelic",
+  "Synthwave", "Post-Rock", "Hardcore", "Grunge", "Emo", "Gothic", "Industrial", "Ska", "Bluegrass",
+  "Gospel", "Opera", "Chamber Music", "New Age", "Experimental", "Lo-Fi Hip Hop", "Trap Soul", "Chillwave",
+  "Vaporwave", "Post-Punk", "Shoegaze"
+];
+
 const genreMap = {
   Pop: "pop",
   Country: "country",
@@ -104,48 +113,27 @@ export async function renderGenre() {
   }
 }
 // getting genres for the drop down
-export async function loadGenres() {
-  const url = `https://ws.audioscrobbler.com/2.0/?method=chart.gettoptags&api_key=${API_KEY}&format=json`;
-
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("Failed to fetch genres");
-    const data = await response.json();
-
-    const genres = data.tags?.tag || [];
-    const dropdown = document.getElementById("genreSelect");
-
-    if (!dropdown) {
-      console.warn("Genre dropdown element not found.");
-      return;
-    }
-
-    dropdown.innerHTML = '<option value="" selected disabled>Choose a genre...</option>';
-
-    genres.forEach((tag) => {
-      const option = document.createElement("option");
-      const capitalized = tag.name
-        .toLowerCase()
-        .split(" ")
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ");
-
-      option.value = tag.name;
-      option.textContent = capitalized;
-      dropdown.appendChild(option);
-    });
-
-    dropdown.addEventListener("change", (gen) => {
-      const selectedGenre = gen.target.value;
-      if (selectedGenre) {
-        window.location.href = `/genre/genre.html?category=${encodeURIComponent(selectedGenre)}`;
-      }
-    });
-  } catch (err) {
-    console.error("Error loading genres:", err);
-    const dropdown = document.getElementById("genreSelect");
-    if (dropdown) {
-      dropdown.innerHTML = "<option disabled>Error loading genres</option>";
-    }
+export function loadGenres() {
+  const dropdown = document.getElementById("genreSelect");
+  if (!dropdown) {
+    console.warn("Genre dropdown element not found.");
+    return;
   }
+
+  dropdown.innerHTML = '<option value="" selected disabled>Choose a genre...</option>';
+
+  genres.forEach((genre) => {
+    const option = document.createElement("option");
+    option.value = genre;
+    option.textContent = genre;
+    dropdown.appendChild(option);
+  });
+
+  // Handle genre selection
+  dropdown.addEventListener("change", (event) => {
+    const selectedGenre = event.target.value;
+    if (selectedGenre) {
+      window.location.href = `/genre/genre.html?category=${encodeURIComponent(selectedGenre)}`;
+    }
+  });
 }
