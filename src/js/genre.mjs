@@ -135,8 +135,8 @@ export async function loadGenres() {
       dropdown.appendChild(option);
     });
 
-    dropdown.addEventListener("change", (e) => {
-      const selectedGenre = e.target.value;
+    dropdown.addEventListener("change", (gen) => {
+      const selectedGenre = gen.target.value;
       if (selectedGenre) {
         window.location.href = `/genre/genre.html?category=${encodeURIComponent(selectedGenre)}`;
       }

@@ -75,8 +75,8 @@ export async function searchSongs(query, searchResults) {
 
   // remove duplicates - same title and artist
   const seen = new Set();
-  const uniqueRecordings = data.recordings.filter((r) => {
-    const key = `${r.title.toLowerCase()}|${r["artist-credit"]?.[0]?.name?.toLowerCase()}`;
+  const uniqueRecordings = data.recordings.filter((recording) => {
+    const key = `${recording.title.toLowerCase()}|${recording["artist-credit"]?.[0]?.name?.toLowerCase()}`;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
@@ -113,12 +113,12 @@ export async function renderSongResults(query, container) {
 
   container.innerHTML = "";
 
-  for (const r of recordings) {
+  for (const recording of recordings) {
     const li = document.createElement("li");
     li.classList.add("song-card");
 
-    const songTitle = r.title;
-    const artistName = r["artist-credit"]?.[0]?.name || "Unknown Artist";
+    const songTitle = recording.title;
+    const artistName = recording["artist-credit"]?.[0]?.name || "Unknown Artist";
 
     // Await the async function
     const imageUrl = await albumCover(songTitle, artistName);
@@ -150,7 +150,6 @@ export async function renderArtistResults(query, container, returnData = false) 
     const data = await response.json();
     const artists = data.artists ?? [];
 
-    //  Handle case: empty results
     if (artists.length === 0) {
       container.innerHTML = "<p>No artists found.</p>";
       return [];

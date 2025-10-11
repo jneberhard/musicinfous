@@ -28,7 +28,6 @@ export async function renderSongResults(query, container) {
   container.innerHTML = "";
 
   const seen = new Set();
-
   for (const track of recordings) {
     const songTitle = track.title;
     const artistName = track["artist-credit"]?.[0]?.name || "unknownArtist";
