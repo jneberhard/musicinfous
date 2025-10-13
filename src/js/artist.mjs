@@ -78,7 +78,7 @@ export async function initArtistPage() {
       ${topTracks
         .map(
           (track, index) => `
-        <li>
+        <li class="list-item">
           <span class="track-number">${index + 1}.</span>
           <a href="/song/song.html?title=${encodeURIComponent(track.name)}&artist=${encodeURIComponent(artist.name)}">
             ${track.name}

@@ -1,22 +1,24 @@
 const LASTFM_API_KEY = "3479d48246e74981bf9426d21276ae3d";
 
+function capitalizeWords(str) {
+  return str.replace(/\b\w/g, char => char.toUpperCase());
+}
+
 // info from musicBrainz
 export async function loadSongData(title, artist) {
   if (!title || !artist) return null;
-  const headers = {
-    "User-Agent": "MusicInfoApp/1.0 (jreberhard3@gmail.com)",
+  const headers = {"User-Agent": "MusicInfoApp/1.0 (jreberhard3@gmail.com)",
   };
 
   const query = `${title} AND artist:${artist}`;
-  const url = `https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(
-    query
-  )}&fmt=json&limit=100&inc=artist-credits+releases+work-rels+artist-rels`;
+  const url = `https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(query)}&fmt=json&limit=50&inc=releases+artist-credits+genres+tags+release-groups`;
 
   try {
     const response = await fetch(url, { headers });
-    if (!response.ok) throw new Error(`MusicBrainz error: ${response.status}`);
+    if (!response.ok) throw new Error("Failed to fetch song data");
+
     const data = await response.json();
-    if (!data.recordings || data.recordings.length === 0) return null;
+    if (!data.recordings?.length) return null;
 
     const filteredRecordings = data.recordings.filter((rec) => {
       const artistCredit = rec["artist-credit"]?.[0]?.name?.toLowerCase().trim() || "";
@@ -30,10 +32,9 @@ export async function loadSongData(title, artist) {
       );
     });
 
+    if (!filteredRecordings.length) return null;
 
-   // if (filteredRecordings.length === 0) return null;
-
-    // Remove duplicates by title + artist
+    // Remove duplicates
     const seen = new Set();
     const uniqueRecordings = filteredRecordings.filter((rec) => {
       const artistName = rec["artist-credit"]?.[0]?.name || "Unknown";
@@ -42,28 +43,79 @@ export async function loadSongData(title, artist) {
       seen.add(key);
       return true;
     });
-        // Sort all recordings by earliest release date
-        const recordings = uniqueRecordings
-          .map((rec) => {
-            const firstRelease = rec.releases?.[0];
-            const date = firstRelease?.date || "Not Listed"; // sort-friendly
-            return { ...rec, releaseDate: date };
-          })
-          .sort((a, b) => new Date(a.releaseDate) - new Date(b.releaseDate));   ///making it so it sorts it by dates
 
-    // Earliest and next recordings
-    const earliestRecording = recordings[0];
-    const otherRecordings = recordings.slice(1, 20);  // the (1, 20) number tells how many recordings to show
+    // Sort by release
+    const recordings = uniqueRecordings
+      .map((rec) => {
+        const firstRelease = rec.releases?.[0];
+        const date = firstRelease?.date || "Unknown";
+        const country = firstRelease?.country || "Unknown";
+        const releaseGroupId = firstRelease?.["release-group"]?.id || rec["release-group"]?.id;
+        const label = firstRelease?.["label-info"]?.[0]?.label?.name || firstRelease?.label || "Unknown";
 
-    const lengthSec = earliestRecording.length
-      ? Math.floor(earliestRecording.length / 1000)
+        return {
+          ...rec,
+          releaseDate: date,
+          country,
+          releaseGroupId,
+          label,
+          popularity: 0,
+        };
+      })
+
+      const lastFmFetches = recordings.map(async (rec) => {
+      const trackTitle = encodeURIComponent(rec.title);
+      const artistName = encodeURIComponent(rec["artist-credit"]?.[0]?.name || artist);
+
+      // getting popularity from lastFM
+      const url = `https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=${LASTFM_API_KEY}&artist=${artistName}&track=${trackTitle}&format=json`;
+
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          const data1 = await res.json();
+          rec.popularity = Number(data1.track?.playcount || 0);
+        }
+      } catch (err) {
+        console.warn("Last.fm playcount fetch failed for", rec.title, err);
+      }
+      });
+      await Promise.all(lastFmFetches);
+      recordings.sort((a, b) => b.popularity - a.popularity);
+
+    const mostPopularRecording = recordings[0];
+    const otherRecordings = recordings.slice(1, 20);
+    const lengthSec = mostPopularRecording.length
+      ? Math.floor(mostPopularRecording.length / 1000)
       : null;
 
+    // 🔍 Fetch genre info .....
+    let genres = [];
+    if (mostPopularRecording.releaseGroupId) {
+      try {
+        const genreUrl = `https://musicbrainz.org/ws/2/release-group/${mostPopularRecording.releaseGroupId}?inc=genres+tags&fmt=json`;
+        const genreRes = await fetch(genreUrl, { headers });
+        if (genreRes.ok) {
+          const genreData = await genreRes.json();
+          genres =
+            genreData.genres?.map((genre) => genre.name) ||
+            genreData.tags?.map((tag) => tag.name) ||
+            [];
+        }
+      } catch (genreErr) {
+        console.warn("Genre fetch failed:", genreErr);
+      }
+    }
+
     return {
-      title: earliestRecording.title,
-      artist: earliestRecording["artist-credit"]?.[0]?.name || "Unknown",
+      title: mostPopularRecording.title,
+      artist: mostPopularRecording["artist-credit"]?.[0]?.name || "Unknown",
       lengthSec,
-      releaseDate: earliestRecording.releases?.[0]?.date || "Unknown",
+      releaseDate: mostPopularRecording.releaseDate,
+      country: mostPopularRecording.country,
+      label: mostPopularRecording.label,
+      genres: genres.length ? genres : ["Unknown"],
+      popularity: mostPopularRecording.popularity,
       otherRecordings,
     };
   } catch (err) {
@@ -150,6 +202,10 @@ export async function renderSongPage() {
         <p><strong>Artist:</strong> ${songData.artist}</p>
         <p><strong>Length:</strong> ${formatLength(songData.lengthSec)}</p>
         <p><strong>First Release:</strong> ${songData.releaseDate}</p>
+        <p><strong>Country:</strong> ${songData.country}</p>
+        <p><strong>Label:</strong> ${songData.label}</p>
+        <p><strong>Total Listens: </strong> ${songData.popularity.toLocaleString()}</p>
+        <p><strong>Genres:</strong> ${Array.isArray(songData.genres) ? songData.genres.map(capitalizeWords).join(", ") : capitalizeWords(songData.genres)}</p>
         <p><strong>Recordings: (Click on "view" to find more info, i.e. writers, publisher, etc.</strong></p>
         ${
           songData.otherRecordings?.length
@@ -157,9 +213,10 @@ export async function renderSongPage() {
         <ul>
           ${songData.otherRecordings
             .map(
-              (r) =>
-                `<li><strong>${r.title}</strong> (${r.releaseDate}) — ${r["artist-credit"]?.[0]?.name || "Unknown Artist"}
-                <a href="https://musicbrainz.org/recording/${r.id}" target="_blank">[view]</a></li>`
+              (rel) =>
+                `<li class="list-item"><strong>${rel.title}</strong> (${rel.releaseDate}) — ${rel["artist-credit"]?.[0]?.name || "Unknown Artist"}
+                — Listens: ${rel.popularity.toLocaleString()}
+                <a href="https://musicbrainz.org/recording/${rel.id}" target="_blank">[view]</a></li>`
             )
             .join("")}
         </ul>`
@@ -177,7 +234,7 @@ export async function renderSongPage() {
       ${
         coverArtData
           ? `<div class="song-cover">
-              <img src="${coverArt}" alt="${songData.title} album cover" class="album-art" />
+              <img src="${coverArt}" alt="Album cover for ${songData.title} by ${songData.artist}" class="album-art" />
             </div>`
           : ""
       }

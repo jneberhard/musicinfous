@@ -85,13 +85,13 @@ export async function renderGenre() {
     // Render songs
     songsEl.innerHTML = songs
       .map(
-        (s, i) => `
-        <li>
+        (song, i) => `
+        <li class="list-item">
           <span class="rank">${i + 1}.</span>
-          <a href="/song/song.html?title=${encodeURIComponent(s.title)}&artist=${encodeURIComponent(
-            s.artist
-          )}">${s.title}</a>
-          <span class="artist"> — ${s.artist}</span>
+          <a href="/song/song.html?title=${encodeURIComponent(song.title)}&artist=${encodeURIComponent(
+            song.artist
+          )}">${song.title}</a>
+          <span class="artist"> — ${song.artist}</span>
         </li>`
       )
       .join("");
@@ -99,10 +99,10 @@ export async function renderGenre() {
     // Render artists
     artistsEl.innerHTML = artists
       .map(
-        (a, i) => `
-        <li>
+        (artist, i) => `
+        <li class="list-item">
           <span class="rank">${i + 1}.</span>
-          <a href="/artist/artist.html?name=${encodeURIComponent(a.name)}">${a.name}</a>
+          <a href="/artist/artist.html?name=${encodeURIComponent(artist.name)}">${artist.name}</a>
         </li>`
       )
       .join("");

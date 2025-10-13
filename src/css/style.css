@@ -31,9 +31,13 @@ body {
 
 h2,
 h1,
-h3 {
+h3,
+p,
+#results-title {
   font-family: Merriweather, serif;
+  color: var(--primary-color);
 }
+
 a {
   text-decoration: none;
 }
@@ -155,7 +159,6 @@ p {
 }
 
 /*for the modal search */
-
 .search-modal {
   display: none;
   position: fixed;
@@ -247,6 +250,11 @@ footer {
   margin-top: 10px;
 }
 
+.copyright {
+  color: white;
+  font-size: small;
+}
+
 .visits {
   font-size: 20px;
 }
@@ -292,35 +300,28 @@ footer {
   display: grid;
   grid-template-columns: 1fr 2fr;
   align-items: center;
-
-  .mission {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 5px;
-    width: 100%;
-    margin: 0 auto;
-    border-radius: 12px;
-    background-color: white;
-    color: black;
-    font-size: 1.25rem;
-    line-height: 1.5;
-    opacity: 0.8;
-  }
-
-  .mission p {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    text-align: center;
-    box-sizing: border-box;
-  }
 }
 
-.main-focus {
+.mission {
   display: flex;
-  flex-direction: row;
-  gap: 2rem;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5px;
+  width: 100%;
+  margin: 0 auto;
+  border-radius: 12px;
+  background-color: white;
+  color: black;
+  font-size: var(--large-font);
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+.mission p {
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+  color: black;
 }
 
 .listings-wrapper,
@@ -335,15 +336,6 @@ footer {
   color: black;
   text-align: center;
   font-size: larger;
-}
-
-.focus-card img {
-  width: auto;
-  border-radius: 10px;
-  display: block;
-  margin: 0 auto 10px;
-  height: 225px;
-  object-fit: contain;
 }
 
 .top-selection .top-songs,
@@ -394,6 +386,24 @@ footer {
   text-align: center;
 }
 
+.list-item {
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
+.list-item:hover {
+  background-color: var(--tertiary-color);
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.list-item a:hover {
+  text-decoration: underline;
+}
+
 /* utility classes */
 .highlight {
   color: var(--tertiary-color);
@@ -412,31 +422,6 @@ button {
 
 .divider {
   border-bottom: 2px solid var(--primary-color);
-}
-
-.mission {
-  top: 1rem;
-  left: 0;
-  right: 0;
-  line-height: 1.3;
-  width: 100%;
-  background-color: white;
-  color: black;
-  opacity: 0.8;
-}
-
-.mission p {
-  margin: 0 auto;
-  width: 50%;
-  text-align: center;
-  color: black;
-}
-
-#results-title,
-h2,
-p,
-h3 {
-  color: var(--primary-color);
 }
 
 /*Focus card selection--------------------Focus card selection---------------------- */
@@ -521,13 +506,10 @@ h3 {
   vertical-align: middle;
 }
 
-/* song page */
-
 #song-info h1 {
   margin-bottom: 1rem;
 }
 
-/* listen link */
 .listen-link {
   display: inline-block;
   margin-top: 10px;
@@ -583,7 +565,6 @@ h3 {
   gap: 0.75rem;
 }
 
-/* Each song card */
 .song-grid,
 .artist-grid {
   display: grid;
@@ -633,14 +614,12 @@ h3 {
   text-decoration: underline;
 }
 
-/* Hover effect */
 .song-card:hover,
 .artist-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Thumbnail image */
 .song-card img,
 .artist-card img {
   width: 100px;
@@ -649,21 +628,18 @@ h3 {
   border-radius: 6px;
 }
 
-/* Text container next to thumbnail */
 .song-card .song-info {
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-/* Song title styling */
 .song-card .song-title {
   font-weight: bold;
   margin-bottom: 4px;
   line-height: 1.2;
 }
 
-/* Artist name styling */
 .song-card .song-artist {
   font-size: 0.9rem;
   color: #555;
@@ -675,9 +651,9 @@ h3 {
   gap: 2rem;
   margin-top: 2rem;
   align-items: flex-start;
+  flex-direction: row;
 }
 
-/* genre results */
 #top-title {
   color: var(--primary-color);
   text-align: center;
@@ -709,7 +685,7 @@ h3 {
 
 .genre-results h3 {
   margin-bottom: 0.5rem;
-  font-size: 1.2rem;
+  font-size: var(--large-font);
   color: #333;
 }
 

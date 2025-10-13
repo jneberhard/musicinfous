@@ -49,7 +49,7 @@ export async function renderArtistSearch(query) {
     resultsContainer.innerHTML = artists
       .map(
         (artist) => `
-        <li>
+        <li class="list-item">
           <a href="/artist/artist.html?name=${encodeURIComponent(artist.name)}">
             ${artist.image ? `<img src="${artist.image}" alt="${artist.name}" />` : ""}
             <span class="artist-name">${artist.name}</span>
