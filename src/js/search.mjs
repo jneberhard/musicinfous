@@ -62,7 +62,7 @@ export function initSearchModal() {
 }
 
 //  Search for songs
-export async function searchSongs(query, searchResults) {
+export async function searchSongs(query) {
   const response = await fetch(
     `https://musicbrainz.org/ws/2/recording?query=${encodeURIComponent(query)}&limit=100&fmt=json`
   );
@@ -104,8 +104,6 @@ async function albumCover(songTitle, artistName) {
 }
 
 export async function renderSongResults(query, container) {
-  const recordings = await searchSongs(query, container);
-
   if (!recordings.length) {
     container.innerHTML = "<p>No songs found.</p>";
     return;

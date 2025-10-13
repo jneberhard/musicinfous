@@ -44,7 +44,7 @@ export async function renderTopSongs(genre = null) {
       .slice(0, 30)
       .map(
         (s, index) => `
-          <li>
+          <li class="list-item">
             <span class="song-rank">${index + 1}.</span>
             <a href="/song/song.html?title=${encodeURIComponent(s.title)}&artist=${encodeURIComponent(
               s.artist
