@@ -10,7 +10,7 @@ export async function loadSongData(title, artist) {
   const headers = {"User-Agent": "MusicInfoApp/1.0 (jreberhard3@gmail.com)",
   };
 
-  const query = `${title} AND artist:${artist}`;
+  const query = `recording: ${title} AND artist:${artist}`;
   const url = `https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(query)}&fmt=json&limit=50&inc=releases+artist-credits+genres+tags+release-groups`;
 
   try {
