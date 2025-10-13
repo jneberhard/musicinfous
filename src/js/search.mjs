@@ -64,7 +64,7 @@ export function initSearchModal() {
 //  Search for songs
 export async function searchSongs(query) {
   const response = await fetch(
-    `https://musicbrainz.org/ws/2/recording?query=${encodeURIComponent(query)}&limit=100&fmt=json`
+    `https://musicbrainz.org/ws/2/recording?query=recording:"${encodeURIComponent(query)}"&limit=100&fmt=json`
   );
   const data = await response.json();
 
