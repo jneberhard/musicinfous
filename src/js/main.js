@@ -1,8 +1,6 @@
 import { loadHeaderFooter } from "./utils.mjs";
 import { renderTopSongs } from "./top-songs.mjs";
 import { renderTopArtists } from "./top-artists.mjs";
-//import { fetchArtistInfo, fetchTopTracks, fetchTopAlbums } from "./artists.mjs";
-//import { loadSong } from "./song.mjs";
 import { initSearchModal } from "./search.mjs";
 import { trackVisits } from "./visits.mjs";
 import { renderSongPage } from "./song.mjs";
@@ -11,11 +9,21 @@ import { renderSongResults } from "./songs.mjs";
 import { renderArtistsPage } from "./artists.mjs";
 import { initArtistPage } from "./artist.mjs";
 import { renderGenre, loadGenres } from "./genre.mjs";
+import { promptForUsername, displayUserData, getUserData, saveUserData } from "./user.mjs";
 
 async function initMain() {
   await loadHeaderFooter();
   initSearchModal();
   trackVisits();
+
+  //ask for name or pull from existing
+  const username = promptForUsername();
+  if (username) {
+    const greeting = document.getElementById("greeting");
+    if (greeting) greeting.textContent = `Welcome, ${username}!`;
+  }
+
+  displayUserData();
 
   const path = window.location.pathname;
 

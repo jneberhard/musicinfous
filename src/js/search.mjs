@@ -1,3 +1,5 @@
+import { updateLastSongSearch, updateLastArtistSearch } from "./user.mjs";
+
 const LASTFM_API_KEY = "3479d48246e74981bf9426d21276ae3d";
 
 export function initSearchModal() {
@@ -45,10 +47,14 @@ export function initSearchModal() {
     const encodedQuery = encodeURIComponent(query);
 
     if (currentSearchType === "artists") {
+      updateLastArtistSearch(query);
       window.location.href = `/artist/artists.html?query=${encodedQuery}`;
-    } else if (currentSearchType === "songs") {
+    }
+    else if (currentSearchType === "songs") {
+      updateLastSongSearch(query);
       window.location.href = `/song/songs.html?query=${encodedQuery}`;
-    } else {
+    }
+    else {
       searchResults.innerHTML = "<p>Please select Songs or Artists first.</p>";
     }
   });
