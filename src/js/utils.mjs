@@ -23,23 +23,7 @@ export function setClick(selector, callback) {
   qs(selector).addEventListener("click", callback);
 }
 
-/*export function getParam(param) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(param);
-}
 
-/*export function renderListWithTemplate(template, parentElement, list, position = "afterbegin", clear = false) {
-  const safeList = Array.isArray(list) ? list : list ? [list] : [];
-
-  if (clear) {
-    parentElement.innerHTML = "";
-  }
-
-  if (safeList.length === 0) return;
-
-  const htmlStrings = safeList.map(template);
-  parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
-}*/
 // Fetch and return template HTML
 export async function loadTemplate(path) {
   const res = await fetch(path);

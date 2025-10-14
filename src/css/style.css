@@ -112,6 +112,37 @@ header .left img:hover {
   text-align: center;
 }
 
+.user-info {
+  background-color: #f9f9f9;
+  color: black;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  line-height: 1.4;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.user-info p {
+  margin: 0.2rem 0;
+  color: black;
+}
+
+.user-info-top,
+.user-info-bottom {
+  display: flex;
+  justify-content: space-between; /* puts items side by side with space */
+  gap: 1rem; /* adds a little space between them */
+  flex-wrap: wrap; /* prevents overlap on small screens */
+}
+
+.user-info-top p,
+.user-info-bottom p {
+  margin: 0; /* optional: cleaner alignment */
+  flex: 1; /* let each <p> share space evenly */
+}
+
 header .center {
   flex: 1;
   min-width: 200px;
