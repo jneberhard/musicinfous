@@ -1,7 +1,7 @@
 //saves the user data
-export function saveUserData(username, favoriteGenre = "", lastSongTerm = "", lastArtistTerm = "") {
+export function saveUserData(name, favoriteGenre = "", lastSongTerm = "", lastArtistTerm = "") {
     const data = {
-        username, favoriteGenre, lastSongTerm, lastArtistTerm,
+        name, favoriteGenre, lastSongTerm, lastArtistTerm,
     };
     localStorage.setItem("userData", JSON.stringify(data));
 }
@@ -13,19 +13,19 @@ export function saveUserData(username, favoriteGenre = "", lastSongTerm = "", la
     return JSON.parse(stored);
 }
 
-    //ask for username and favorite genre if there is not one already stored
-    export function promptForUsername() {
+    //ask for name and favorite genre if there is not one already stored
+    export function promptForname() {
     const userData = getUserData();
-    if (!userData?.username) {
-        const username = prompt("Enter your username:");
+    if (!userData?.name) {
+        const name = prompt("Enter your name:");
         const favoriteGenre = prompt("What is your favorite music genre?");
-        if (username) {
-        saveUserData(username,favoriteGenre || "Unknown", "", "");
-        return username;
+        if (name) {
+        saveUserData(name,favoriteGenre || "Unknown", "", "");
+        return name;
         }
         return null;
     }
-    return userData.username;
+    return userData.name;
 }
 
 export function displayUserData() {
@@ -38,7 +38,7 @@ export function displayUserData() {
     const artistEl = document.getElementById("last-artist-search");
     
 
-    if (greeting) greeting.textContent = `Welcome back, ${data.username}!`;
+    if (greeting) greeting.textContent = `Welcome back, ${data.name}!`;
     if (genreEl) genreEl.textContent = data.favoriteGenre
         ? `Favorite Genre: ${data.favoriteGenre}`
         : `Favorite Genre: Not set yet`;
@@ -54,12 +54,12 @@ export function updateLastSongSearch(term) {
     const data = getUserData();
     if (!data) return;
     data.lastSongTerm = term;
-    saveUserData(data.username, data.favoriteGenre, data.lastSongTerm, data.lastArtistTerm);
+    saveUserData(data.name, data.favoriteGenre, data.lastSongTerm, data.lastArtistTerm);
 }
 
 export function updateLastArtistSearch(term) {
     const data = getUserData();
     if (!data) return;
     data.lastArtistTerm = term;
-    saveUserData(data.username, data.favoriteGenre, data.lastSongTerm, data.lastArtistTerm);
+    saveUserData(data.name, data.favoriteGenre, data.lastSongTerm, data.lastArtistTerm);
 }
