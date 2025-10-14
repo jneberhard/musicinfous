@@ -6,7 +6,6 @@
   --secondary-color: #525b0f;
   --tertiary-color: rgb(192, 124, 192);
   --light-grey: #d0d0d0;
-  --dark-grey: #303030;
 
   /* sizes */
   --font-base: 18px;
@@ -371,6 +370,15 @@ footer {
   color: black;
   text-align: center;
   font-size: larger;
+}
+
+span.song-rank,
+span.artist-rank,
+span.song-artist,
+span.song-title {
+  background-color: #fff;
+  padding: 2px 6px;
+  border-radius: 6px;
 }
 
 .top-selection .top-songs,

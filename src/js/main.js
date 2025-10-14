@@ -9,7 +9,7 @@ import { renderSongResults } from "./songs.mjs";
 import { renderArtistsPage } from "./artists.mjs";
 import { initArtistPage } from "./artist.mjs";
 import { renderGenre, loadGenres } from "./genre.mjs";
-import { promptForUsername, displayUserData, getUserData, saveUserData } from "./user.mjs";
+import { promptForname, displayUserData, getUserData, saveUserData } from "./user.mjs";
 
 async function initMain() {
   await loadHeaderFooter();
@@ -17,10 +17,10 @@ async function initMain() {
   trackVisits();
 
   //ask for name or pull from existing
-  const username = promptForUsername();
-  if (username) {
+  const name = promptForname();
+  if (name) {
     const greeting = document.getElementById("greeting");
-    if (greeting) greeting.textContent = `Welcome, ${username}!`;
+    if (greeting) greeting.textContent = `Welcome, ${name}!`;
   }
 
   displayUserData();
