@@ -109,7 +109,7 @@ async function albumCover(songTitle, artistName) {
   }
 }
 
-export async function renderSongResults(query, container) {
+export async function renderSongResults(recordings, container) {
   if (!recordings.length) {
     container.innerHTML = "<p>No songs found.</p>";
     return;

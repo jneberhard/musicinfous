@@ -2,11 +2,11 @@ export function trackVisits() {
   const visitsDisplay = document.querySelector(".visits"); //   Initialize display element variable
   const lastVisitDisplay = document.querySelector(".last-visit"); // Initialize last visit display
 
-  let numVisits = Number(localStorage.getItem("numVisits-ls")) || 0; //  Get the stored VALUE for the numVisits-ls KEY in localStorage if it exists.
+  let numVisits = Number(localStorage.getItem("numVisits-ls")) || 0; //  Get the stored VALUE for the numVisits-ls KEY in localStorage 
   let lastVisit = localStorage.getItem("lastVisit-ls"); //get the stored value for the last visit
 
   numVisits++; // increment the number of visits by one.
-  // Determine if this is the first visit or display the number of visits. We wrote this example backwards in order for you to think deeply about the logic.
+  // Determine if this is the first visit or display the number of visits.
   if (visitsDisplay) {
     if (numVisits === 1) {
       visitsDisplay.textContent = `This is your first visit. 🥳 Welcome!`;
