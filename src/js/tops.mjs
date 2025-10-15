@@ -12,7 +12,7 @@ export async function initTopsPage() {
 
   if (!topTitle) return;
 
-  // Hide both sections initially
+  // Hide both sections
   if (topSongsDiv) topSongsDiv.style.display = "none";
   if (topArtistsDiv) topArtistsDiv.style.display = "none";
 

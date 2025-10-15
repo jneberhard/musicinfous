@@ -11,7 +11,7 @@ export async function loadSongData(title, artist) {
   };
 
   const query = `recording: ${title} AND artist:${artist}`;
-  const url = `https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(query)}&fmt=json&limit=50&inc=releases+artist-credits+genres+tags+release-groups`;
+  const url = `https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(query)}&fmt=json&limit=50&inc=releases+artist-credits+genres+tags+release-groups+labels`;
 
   try {
     const response = await fetch(url, { headers });
@@ -212,8 +212,7 @@ export async function renderSongPage() {
             ? `
         <ul>
           ${songData.otherRecordings
-            .map(
-              (rel) =>
+            .map((rel) =>
                 `<li class="list-item"><strong>${rel.title}</strong> (${rel.releaseDate}) — ${rel["artist-credit"]?.[0]?.name || "Unknown Artist"}
                 — Listens: ${rel.popularity.toLocaleString()}
                 <a href="https://musicbrainz.org/recording/${rel.id}" target="_blank">[view]</a></li>`

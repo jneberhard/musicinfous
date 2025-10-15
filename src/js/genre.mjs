@@ -21,9 +21,7 @@ const genreMap = {
 
 // --- Fetch top artists ---
 async function loadTopArtists(genreTag) {
-  const url = `https://ws.audioscrobbler.com/2.0/?method=tag.gettopartists&tag=${encodeURIComponent(
-    genreTag
-  )}&api_key=${API_KEY}&format=json&limit=${TOP_LIMIT}`;
+  const url = `https://ws.audioscrobbler.com/2.0/?method=tag.gettopartists&tag=${encodeURIComponent(genreTag)}&api_key=${API_KEY}&format=json&limit=${TOP_LIMIT}`;
 
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Error fetching top artists: ${response.status}`);
@@ -41,9 +39,7 @@ async function loadTopArtists(genreTag) {
 // search top songs for selected genre
 // Fetch data from Last.fm
 async function loadTopSongs(genreTag) {
-  const url = `https://ws.audioscrobbler.com/2.0/?method=tag.gettoptracks&tag=${encodeURIComponent(
-    genreTag
-  )}&api_key=${API_KEY}&format=json&limit=${TOP_LIMIT}`;
+  const url = `https://ws.audioscrobbler.com/2.0/?method=tag.gettoptracks&tag=${encodeURIComponent(genreTag)}&api_key=${API_KEY}&format=json&limit=${TOP_LIMIT}`;
 
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Error fetching top songs: ${response.status}`);
@@ -84,13 +80,10 @@ export async function renderGenre() {
 
     // Render songs
     songsEl.innerHTML = songs
-      .map(
-        (song, i) => `
+      .map((song, i) => `
         <li class="list-item">
           <span class="rank">${i + 1}.</span>
-          <a href="/song/song.html?title=${encodeURIComponent(song.title)}&artist=${encodeURIComponent(
-            song.artist
-          )}">${song.title}</a>
+          <a href="/song/song.html?title=${encodeURIComponent(song.title)}&artist=${encodeURIComponent(song.artist)}">${song.title}</a>
           <span class="artist"> — ${song.artist}</span>
         </li>`
       )
@@ -98,8 +91,7 @@ export async function renderGenre() {
 
     // Render artists
     artistsEl.innerHTML = artists
-      .map(
-        (artist, i) => `
+      .map((artist, i) => `
         <li class="list-item">
           <span class="rank">${i + 1}.</span>
           <a href="/artist/artist.html?name=${encodeURIComponent(artist.name)}">${artist.name}</a>

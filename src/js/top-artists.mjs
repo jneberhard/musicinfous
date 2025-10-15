@@ -38,8 +38,7 @@ export async function renderTopArtists() {
     const artists = await loadTopArtists();
     topArtistsContainer.innerHTML = artists
       .slice(0, 30)
-      .map(
-        (artist, index) =>
+      .map((artist, index) =>
           `<li class="list-item">
             <span class="artist-rank">${index + 1}.</span>
             <a href="/artist/artist.html?name=${encodeURIComponent(artist.name)}">${artist.name}</a>
